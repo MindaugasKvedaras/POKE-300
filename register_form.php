@@ -1,9 +1,9 @@
 <?php
-@include 'config.php';
+
+include 'config.php';
 session_start();
 
 if (isset($_POST['submit'])) {
-    $errors = [];
 
     $name = mysqli_real_escape_string($conn, $_POST['name']);
     $surname = mysqli_real_escape_string($conn, $_POST['surname']);
@@ -11,41 +11,19 @@ if (isset($_POST['submit'])) {
     $pass = md5($_POST['password']);
     $cpass = md5($_POST['cpassword']);
 
-    // $email = $_POST["email"];
-
-    // $select = "SELECT * FROM user_form WHERE email = '$email'";
     $sql = "INSERT INTO user_form (name, surname, email, password) VALUES ('$name', '$surname', '$email', '$pass')";
     if (mysqli_query($conn, $sql)) {
-      echo "Registration successful!";
+        echo "Registration successful!";
     } else {
-      echo "An error occurred: " . mysqli_error($conn);
+        echo "An error occurred: " . mysqli_error($conn);
     }
-    // $result = mysqli_query($conn, $select);
-    // $result = $conn->query($select);
-
-    // if ($result->num_rows > 0) {
-    //   echo json_encode(false); // Email already exists
-    // } else {
-    //   echo json_encode(true); // Email does not exist
-    // }
-
-
-    // if (mysqli_num_rows($result) > 0) {
-    //     echo 'Vartotojas su šiuo el.pašto adresu jau užregistruotas!';
-    // } else {
-
-    //     if (empty($errors['email'])) {
-    //         $insert = "INSERT INTO user_form (name, surname, email, password) VALUES ('$name', '$surname', '$email', '$pass')";
-    //         mysqli_query($conn, $insert);
-    //         header('location:register_form.php');
-    //     }
-    // }
 }
 
 if (isset($_POST['signin'])) {
+    $errors = [];
+
     $email = mysqli_real_escape_string($conn, $_POST['email']);
     $pass = md5($_POST['password']);
-    $errors = [];
 
     $select = "SELECT * FROM user_form WHERE email = '$email' && password = '$pass'";
     $result = mysqli_query($conn, $select);
@@ -58,6 +36,7 @@ if (isset($_POST['signin'])) {
         $errors['signin'] = 'Blogi prisijungimo duomenys';
     }
 }
+
 ?>
     
 <!DOCTYPE html>
@@ -313,12 +292,11 @@ if (isset($_POST['signin'])) {
         url: 'register_form.php',
         data: formData,
         success: function(response) {
-          alert(response)
+          // display success message
             successMessage.show();
             signupForm.hide();
             formContainer.hide();
-          // display success message
-        //   alert('Form submitted successfully');
+          
           // reload the page after 2 seconds
           setTimeout(function() {
 
