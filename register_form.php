@@ -1,6 +1,21 @@
 <?php
 
-include 'config.php';
+/**
+ * User Registration Page
+ *
+ * This file contains the code for managing user accounts, including registration,
+ * and login.
+ *
+ * PHP version 7.4
+ *
+ * @category No_Category
+ * @package  No_Package
+ * @author   Mindaugas Kvedaras <kvedaras.mindaugas@gmail.com>
+ * @license  No License
+ * @link     No link
+ */
+
+require 'config.php';
 session_start();
 
 if (isset($_POST['submit'])) {
@@ -47,8 +62,14 @@ if (isset($_POST['signin'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>register form</title>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script 
+      src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+    >
+    </script>
+    <script 
+      src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"
+    >
+    </script>
     <link 
         rel="stylesheet" 
         href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
@@ -106,12 +127,11 @@ if (isset($_POST['signin'])) {
                   </div>
                 </div>
                 <div class="container has-text-centered">
-                  <?php
-                    if (isset($errors['signin'])) { ?>
-                      <span id="signin-error" class="has-text-danger">
-                        <?php echo $errors['signin'] ?> 
-                      </span>
-                  <?php } ?>
+                  <?php if (isset($errors['signin'])) : ?>
+                    <span id="signin-error" class="has-text-danger">
+                        <?php echo $errors['signin']; ?>
+                    </span>
+                  <?php endif; ?>
                 </div>
                 <div class="field has-text-centered">
                   <button 
@@ -228,141 +248,8 @@ if (isset($_POST['signin'])) {
     </div>
   </div>
 </section>
-<script>
-    var inputs = $(".input");
-    inputs.on("input", function() {
-        var errorElement = $("#" + this.name + "-error");
 
-    if (!this.value.length) {
-        $(this).addClass("is-danger");
-    } else {
-        $(this).removeClass("is-danger");
-        this.value.length > 0 ? $(this).addClass("is-success") : null;
-    }
-
-    errorElement.css("display", this.value.length > 0 ? "none" : "inline");
-    });
-
-    $(document).ready(function() {
-    var formTitle = $('#form-title');
-    var signupBtn = $('#signup-button');
-    var signupBtn2 = $('#signup');
-    var signinBtn = $('#signin-button');
-    var signinForm = $('#signin-form');
-    var signupForm = $('#signup-form');
-    var successMessage = $('#success-message');
-    var formContainer = $('#form-container');
-
-    signupBtn.click(function() {
-      // Hide the sign-in form and show the sign-up form
-      signinForm.hide();
-      signupForm.show();
-      // Update the form title
-      formTitle.text('REGISTRACIJA');
-    });
-
-    signinBtn.click(function() {
-      // Hide the sign-up form and show the sign-in form
-      signinForm.show();
-      signupForm.hide();
-      // Update the form title
-      formTitle.text('PRISIJUNGIMAS');
-    });
-
-    // add the pattern method to the validation plugin
-  $.validator.addMethod("pattern", function(value, element, pattern) {
-    if (pattern instanceof RegExp) {
-      return pattern.test(value);
-    } else {
-      return new RegExp(pattern).test(value);
-    }
-  }, "Invalid format.");
-  
-  // add validation rules to the form fields
-  $('#signup-form').validate({
-    rules: {
-      name: 'required',
-      surname: 'required',
-      email: {
-        required: true,
-        email: true,
-        remote: {
-            url: 'check_email.php',
-            type: 'post',
-        }
-      },
-      password: {
-        required: true,
-        minlength: 8,
-        pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/
-      },
-      cpassword: {
-        required: true,
-        minlength: 8,
-        equalTo: '#password'
-      }
-    },
-    messages: {
-      name: 'Įveskite vardą',
-      surname: 'Įveskite pavardę',
-      email: {
-        required: 'Įveskite el. pašto adresą',
-        email: 'Įvedėte ne el. pašto adresą (pvz.: vardas@gmail.com)',
-        remote: 'Vartotojas su šiuo el. paštu jau užregistruotas'
-      },
-      password: {
-        required: 'Įveskite slaptažodį',
-        minlength: 'Slaptažodį turi sudaryti ne mažiau 8 simboliai',
-        pattern: 'Slaptažodis turi turėti bent vieną didžiają raidę ir vieną skaičių'
-      },
-      cpassword: {
-        required: 'Pakartokite savo slaptažodį',
-        minlength: 'Slaptažodį turi sudaryti ne mažiau 8 simboliai',
-        equalTo: 'Slaptažodžiai nesutampa'
-      }
-    },
-    errorPlacement: function(error, element) {
-      // add error message styling
-      error.addClass('help is-danger');
-      // insert error message after the invalid input field
-      error.insertAfter(element);
-
-      element.addClass('is-danger');
-      error.appendTo(element.parent());
-    },
-    // handle form submission
-    submitHandler: function(form) {
-      console.log('Submitting form...');
-      // get the form data
-      var formData = $(form).serialize();
-      console.log('Form data:', formData);
-
-      // submit the form data
-      $.ajax({
-        type: 'POST',
-        url: 'register_form.php',
-        data: formData,
-        success: function(response) {
-          // display success message
-            successMessage.show();
-            signupForm.hide();
-            formContainer.hide();
-          
-          // reload the page after 2 seconds
-          setTimeout(function() {
-
-            location.reload();
-          }, 3000);
-        },
-        error: function(xhr, status, error) {
-          // display error message
-          alert('Form submission failed: ' + error);
-        }
-      });
-    }
-  });
-});
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
