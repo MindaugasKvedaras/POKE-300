@@ -1,0 +1,13 @@
+{
+    "require-dev": {
+        "squizlabs/php_codesniffer": "^3.7"
+    },
+    "scripts": {
+        "check-coding-standards": [
+            "phpcs --standard=PSR12 ."
+        ],
+        "fix-coding-standards": [
+            "phpcbf --standard=PSR12 ."
+        ]
+    }
+}
