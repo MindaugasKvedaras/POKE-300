@@ -9,5 +9,8 @@
         "fix-coding-standards": [
             "phpcbf --standard=PSR12 ."
         ]
+    },
+    "require": {
+        "vlucas/phpdotenv": "^5.5"
     }
 }

@@ -13,16 +13,22 @@
  * @license  No License
  * @link     No link
  */
-require 'config.php'; // include database connection
+require_once './server/config.php'; // include database connection
 
 if (isset($_POST['email'])) {
+
     $email = $_POST['email'];
-    $sql = "SELECT * FROM user_form WHERE email='$email'";
-    $result = mysqli_query($conn, $sql);
-    if (mysqli_num_rows($result) > 0) {
-        echo "false"; // email already exists
+
+    $stmt = $pdo->prepare('SELECT * FROM user_form WHERE email = ?');
+    $stmt->execute([$email]);
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    if ($user) {
+        // Email address is already registered
+        echo 'false';
     } else {
-        echo "true"; // email is available
+        echo 'true';
+
+        exit();
     }
 }
-?>

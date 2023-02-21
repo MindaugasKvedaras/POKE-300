@@ -15,40 +15,41 @@
  * @link     No link
  */
 
-require 'config.php';
+require './server/config.php';
 session_start();
 
 if (isset($_POST['submit'])) {
 
-    $name = mysqli_real_escape_string($conn, $_POST['name']);
-    $surname = mysqli_real_escape_string($conn, $_POST['surname']);
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $name = $_POST['name'];
+    $surname = $_POST['surname'];
+    $email = $_POST['email'];
     $pass = md5($_POST['password']);
     $cpass = md5($_POST['cpassword']);
 
-    $sql = "INSERT INTO user_form (name, surname, email, password) VALUES ('$name', '$surname', '$email', '$pass')";
-    if (mysqli_query($conn, $sql)) {
-        echo "Registration successful!";
+    $stmt = $pdo->prepare('INSERT INTO user_form (name, surname, email, password) VALUES (?, ?, ?, ?)');
+    $stmt->execute([$name, $surname, $email, $pass]);
+
+    if ($stmt) {
+        echo json_encode(['success' => true, 'message' => "Registration successful!"]);
     } else {
-        echo "An error occurred: " . mysqli_error($conn);
+        echo json_encode(['success' => false, 'message' => 'Error submitting data']);
     }
 }
 
 if (isset($_POST['signin'])) {
-    $errors = [];
 
-    $email = mysqli_real_escape_string($conn, $_POST['email']);
+    $email = $_POST['email'];
     $pass = md5($_POST['password']);
 
-    $select = "SELECT * FROM user_form WHERE email = '$email' && password = '$pass'";
-    $result = mysqli_query($conn, $select);
+      $stmt = $pdo->prepare("SELECT * FROM user_form WHERE email = ? AND password = ? ");
+      $stmt->execute([$email, $pass]);
+      $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (mysqli_num_rows($result) > 0) {
-        $row = mysqli_fetch_array($result);
-        $_SESSION['user_name'] = $row['name'];
+    if ($result) {
+        $_SESSION['user_name'] = $result['name'];
         header('location:user_page.php');
     } else {
-        $errors['signin'] = 'Blogi prisijungimo duomenys';
+        $error = 'Blogi prisijungimo duomenys';
     }
 }
 
@@ -127,9 +128,10 @@ if (isset($_POST['signin'])) {
                   </div>
                 </div>
                 <div class="container has-text-centered">
-                  <?php if (isset($errors['signin'])) : ?>
+                  <p id="signin-error"></p>
+                  <?php if (isset($error)) : ?>
                     <span id="signin-error" class="has-text-danger">
-                        <?php echo $errors['signin']; ?>
+                        <?php echo $error; ?>
                     </span>
                   <?php endif; ?>
                 </div>
@@ -249,7 +251,12 @@ if (isset($_POST['signin'])) {
   </div>
 </section>
 
-<script src="script.js"></script>
-
+<script src="scripts/register_form_validation.js"></script>
+<script>
+var inputs = $(".input");
+inputs.on("input", function() {
+    this.value.length > 0 ? $(this).addClass("is-success") : null;
+});
+</script>
 </body>
 </html>

@@ -1,6 +1,6 @@
 <?php
 
-@include 'config.php';
+require './server/config.php';
 
 session_start();
 
@@ -9,26 +9,9 @@ if (!isset($_SESSION['user_name'])) {
 }
 
 // Query database to get user data
-$sql = "SELECT id, name, surname, email FROM user_form";
-$result = $conn->query($sql);
 
-// Create array of user objects
-$users = [];
-
-if ($result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $user = array(
-            'id' => $row['id'],
-            'name' => $row['name'],
-            'surname' => $row['name'],
-            'email' => $row['email'],
-        );
-        array_push($users, $user);
-    }
-}
-
-// Close MySQL database connection
-$conn->close();
+$stmt = $pdo->query('SELECT * FROM user_form');
+$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 ?>
 

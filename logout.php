@@ -1,6 +1,6 @@
 <?php
 
-@include 'config.php';
+@include 'server/config.php';
 
 session_start();
 session_unset();

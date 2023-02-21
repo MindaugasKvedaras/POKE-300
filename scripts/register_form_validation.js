@@ -75,21 +75,22 @@ $(document).ready(function() {
         equalTo: 'Slaptažodžiai nesutampa'
       }
     },
+    highlight: function(element) {
+      $(element).addClass('is-danger');
+    },
+    unhighlight: function(element) {
+      $(element).removeClass('is-danger');
+    },
     errorPlacement: function(error, element) {
       // add error message styling
       error.addClass('help is-danger');
       // insert error message after the invalid input field
       error.insertAfter(element);
-
-      element.addClass('is-danger');
-      error.appendTo(element.parent());
     },
     // handle form submission
     submitHandler: function(form) {
-      console.log('Submitting form...');
       // get the form data
       var formData = $(form).serialize();
-      console.log('Form data:', formData);
 
       // submit the form data
       $.ajax({
@@ -116,3 +117,5 @@ $(document).ready(function() {
     }
   });
 });
+
+
