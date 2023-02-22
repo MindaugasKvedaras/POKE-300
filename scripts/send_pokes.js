@@ -8,13 +8,16 @@ $(document).ready(function() {
         
         var message = 'siunčia tau poke';
 
+        var sending_date = new Date().toLocaleString('lt-LT');
+
         //Send the email information to the server using Ajax
         $.ajax({
           url: './user_page.php',
           method: 'POST',
           data: {
             recipient: recipient,
-            message: message
+            message: message,
+            sending_date: sending_date
           },
           success: function() {
             // Handle the success response

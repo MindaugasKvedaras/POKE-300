@@ -7,9 +7,18 @@ foreach (glob("./server/*.php") as $filename) {
 }
 
 if (isset($_POST['recipient'])) {
+
+    // // Set the timezone to your local timezone
+    // date_default_timezone_set('Lithuania/Kaunas');
+
+    // // Get the current date and time in the local timezone
+    // $sending_date = date('Y-m-d H:i:s');
     // The key exists, so it's safe to access it
     $recipient = $_POST['recipient'];
     $message = $_SESSION['user_name'] . ' ' . $_POST['message'];
+    $sending_date = $_POST['sending_date'];
+
+
 
 
     if (!filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
@@ -18,8 +27,8 @@ if (isset($_POST['recipient'])) {
     }
     
     try {
-        $stmt = $pdo->prepare('INSERT INTO poke_history (sender_email, recipient_email, message) VALUES (?, ?, ?)');
-        $stmt->execute([$sender_email, $recipient, $message]);
+        $stmt = $pdo->prepare('INSERT INTO poke_history (sender_email, recipient_email, message, date) VALUES (?, ?, ?, ?)');
+        $stmt->execute([$sender_email, $recipient, $message, $sending_date]);
         http_response_code(200);
     } catch (PDOException $e) {
         http_response_code(500);
