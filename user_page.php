@@ -31,7 +31,6 @@ if (isset($_POST['recipient'])) {
     $error =  "Error: recipient key not found in POST data";
 }
 
-
 ?>
 
 <!DOCTYPE html>
@@ -47,19 +46,10 @@ if (isset($_POST['recipient'])) {
         rel="stylesheet" 
         href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<div id="success-modal" class="modal">
-  <div class="modal-background"></div>
-  <div class="modal-content has-text-centered">
-  <article class="message is-success">
-    <div class="message-body">
-        <p class="is-size-3">Žinutė sėkmingai išsiųsta!</p>
-    </div>
-</article>
-  </div>
-</div>  
 <section class="hero is-success mb-4">
   <div class="hero-body">
     <div class="container">
@@ -79,46 +69,67 @@ if (isset($_POST['recipient'])) {
     </div>
   </div>
 </section>
-    <div class="container is-flex is-justify-content-center custom-height">
-        <div class="table-container">
-            <table class="table is-striped is-fullwidth is-hoverable is-centered" id="user-table" style="min-width:800px;">
-                <thead class="has-background-success">
-                    <tr>
-                    <th class="has-text-white">ID</th>
-                    <th class="has-text-white">Vardas</th>
-                    <th class="has-text-white">Pavardė</th>
-                    <th class="has-text-white">El. paštas</th>
-                    <th class="has-text-white">Pokes(gauti)</th>
-                    <th class="has-text-white">Pokes(išsiųsti)</th>
-                    <th class="has-text-white">Išsiųsti el. laišką</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($users as $user): ?>
-                        <tr>
-                            <td><?php echo $user['user_id']; ?></td>
-                            <td><?php echo $user['name']; ?></td>
-                            <td><?php echo $user['surname']; ?></td>
-                            <td><?php echo $user['email']; ?></td>
-                            <td><?php echo isset($count_map[$user['email']]) ? $count_map[$user['email']] : 0; ?></td>
-                            <td>
-                                <?php 
-                                    $count = 0;
-                                foreach ($email_counts as $email_count) {
-                                    $count = $email_count['sender_email'] === $user['email'] ? $email_count['count'] : $count;
-                                }
-                                    echo $count;
-                                ?>
-                            </td>
-                            <td>
-                                <button class="button is-primary send-email-button" id="email-btn" type="submit" data-recipient="<?php echo $user['email']; ?>">Send Email</button>
-                            </td>
-                        </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>    
-        </div>
+<div class="container is-flex is-justify-content-center custom-height">
+  <div class="table-container">
+    <div class="field">
+      <div class="control has-icons-left">
+        <input id="search-input" class="input is-success" type="text" placeholder="Ieškoti vartotojų">
+        <span class="icon is-left has-text-success">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
     </div>
-<script src="scripts/send_pokes.js"></script>    
+    <table class="table is-striped is-fullwidth is-hoverable is-centered" id="user-table" style="min-width:800px;">
+      <thead class="has-background-success">
+        <tr>
+          <th class="has-text-white">ID</th>
+          <th class="has-text-white">Vardas</th>
+          <th class="has-text-white">Pavardė</th>
+          <th class="has-text-white">El. paštas</th>
+          <th class="has-text-white">Pokes(gauti)</th>
+          <th class="has-text-white">Pokes(išsiųsti)</th>
+          <th class="has-text-white">Išsiųsti el. laišką</th>
+        </tr>
+      </thead>
+        <tbody id="user-table-body">
+          <?php foreach ($users as $user): ?>
+            <tr>
+              <td><?php echo $user['user_id']; ?></td>
+              <td><?php echo $user['name']; ?></td>
+              <td><?php echo $user['surname']; ?></td>
+              <td><?php echo $user['email']; ?></td>
+              <td><?php echo isset($count_map[$user['email']]) ? $count_map[$user['email']] : 0; ?></td>
+              <td>
+                <?php 
+                  $count = 0;
+                foreach ($email_counts as $email_count) {
+                    $count = $email_count['sender_email'] === $user['email'] ? $email_count['count'] : $count;
+                }
+                    echo $count;
+                ?>
+              </td>
+              <td>
+                <button class="button is-primary send-email-button" id="email-btn" type="submit" data-recipient="<?php echo $user['email']; ?>">Send Email</button>
+              </td>
+            </tr>
+          <?php endforeach; ?>
+        </tbody>
+    </table>    
+  </div>
+</div>
+  <div id="success-modal" class="modal">
+    <div class="modal-background"></div>
+    <div class="modal-content has-text-centered">
+      <article class="message is-success">
+        <div class="message-body">
+            <p class="is-size-3">Žinutė sėkmingai išsiųsta!</p>
+        </div>
+      </article>
+    </div>
+</div>  
+
+<script src="scripts/send_pokes.js"></script>
+<script src="scripts/search_users.js"></script>    
+
 </body>
 </html>
