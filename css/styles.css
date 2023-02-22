@@ -22,10 +22,11 @@ body{
    background-color: #e5fbe5!important;
  }
  
- .table.is-striped tbody tr:nth-child(even):hover {
+.table.is-striped tbody tr:nth-child(even):hover {
    background-color: #AFE1AF!important;
- } 
+} 
 
-/* .table thead {
-   background-color: #48C774!important;
-} */
+.custom-height {
+   height: 100vh;
+}
+

@@ -46,6 +46,7 @@ if (isset($_POST['signin'])) {
       $result = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($result) {
+        $_SESSION['user_id'] = $result['user_id'];
         $_SESSION['user_name'] = $result['name'];
         header('location:user_page.php');
     } else {
@@ -75,7 +76,7 @@ if (isset($_POST['signin'])) {
         rel="stylesheet" 
         href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     >
-    <link rel="stylesheet" href="css/styling.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 
 <body>
@@ -258,5 +259,6 @@ inputs.on("input", function() {
     this.value.length > 0 ? $(this).addClass("is-success") : null;
 });
 </script>
+
 </body>
 </html>

@@ -1,17 +1,36 @@
 <?php
 
-require './server/config.php';
-
 session_start();
 
-if (!isset($_SESSION['user_name'])) {
-    header('location:register_form.php');
+foreach (glob("./server/*.php") as $filename) {
+    include $filename;
 }
 
-// Query database to get user data
+if (isset($_POST['recipient'])) {
+    // The key exists, so it's safe to access it
+    $recipient = $_POST['recipient'];
+    $message = $_SESSION['user_name'] . ' ' . $_POST['message'];
 
-$stmt = $pdo->query('SELECT * FROM user_form');
-$users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    if (!filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
+        http_response_code(400);
+        exit();
+    }
+    
+    try {
+        $stmt = $pdo->prepare('INSERT INTO poke_history (sender_email, recipient_email, message) VALUES (?, ?, ?)');
+        $stmt->execute([$sender_email, $recipient, $message]);
+        http_response_code(200);
+    } catch (PDOException $e) {
+        http_response_code(500);
+        exit();
+    }
+
+} else {
+    // The key doesn't exist, so you might want to handle the error here
+    $error =  "Error: recipient key not found in POST data";
+}
+
 
 ?>
 
@@ -22,20 +41,32 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>user page</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
     <link 
         rel="stylesheet" 
         href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     >
-    <link rel="stylesheet" href="css/styling.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+<div id="success-modal" class="modal">
+  <div class="modal-background"></div>
+  <div class="modal-content has-text-centered">
+  <article class="message is-success">
+    <div class="message-body">
+        <p class="is-size-3">Žinutė sėkmingai išsiųsta!</p>
+    </div>
+</article>
+  </div>
+</div>  
 <section class="hero is-success mb-4">
   <div class="hero-body">
     <div class="container">
       <div class="container is-flex is-justify-content-space-between">
         <div>
             <h1 class="title">
-                Sveiki, <span><?php echo $_SESSION['user_name'] ?></span>
+                Sveiki, <span><?php echo $sender_name ?></span>
             </h1>
         </div>
         <div>
@@ -48,50 +79,46 @@ $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </div>
   </div>
 </section>
-    <div class="container is-flex is-justify-content-center">
+    <div class="container is-flex is-justify-content-center custom-height">
         <div class="table-container">
-            <table class="table is-striped is-fullwidth is-hoverable is-centered" style="min-width:800px;">
+            <table class="table is-striped is-fullwidth is-hoverable is-centered" id="user-table" style="min-width:800px;">
                 <thead class="has-background-success">
                     <tr>
                     <th class="has-text-white">ID</th>
                     <th class="has-text-white">Vardas</th>
                     <th class="has-text-white">Pavardė</th>
                     <th class="has-text-white">El. paštas</th>
+                    <th class="has-text-white">Pokes(gauti)</th>
+                    <th class="has-text-white">Pokes(išsiųsti)</th>
                     <th class="has-text-white">Išsiųsti el. laišką</th>
                     </tr>
                 </thead>
                 <tbody>
                     <?php foreach ($users as $user): ?>
                         <tr>
-                            <td><?php echo $user['id']; ?></td>
+                            <td><?php echo $user['user_id']; ?></td>
                             <td><?php echo $user['name']; ?></td>
                             <td><?php echo $user['surname']; ?></td>
                             <td><?php echo $user['email']; ?></td>
+                            <td><?php echo isset($count_map[$user['email']]) ? $count_map[$user['email']] : 0; ?></td>
                             <td>
-                            <button class="button is-primary send-email-button" data-email="<?php echo $user['email']; ?>">Send Email</button>
+                                <?php 
+                                    $count = 0;
+                                foreach ($email_counts as $email_count) {
+                                    $count = $email_count['sender_email'] === $user['email'] ? $email_count['count'] : $count;
+                                }
+                                    echo $count;
+                                ?>
+                            </td>
+                            <td>
+                                <button class="button is-primary send-email-button" id="email-btn" type="submit" data-recipient="<?php echo $user['email']; ?>">Send Email</button>
                             </td>
                         </tr>
                     <?php endforeach; ?>
-                    <!-- <?php
-                        $select = "SELECT * FROM user_form";
-                        $result = mysqli_query($conn, $select);
-
-                        if (mysqli_num_rows($result) > 0) {
-                            while ($row = mysqli_fetch_assoc($result)) {
-                            echo "<tr>";
-                            echo "<td>" . $row["id"] . "</td>";
-                            echo "<td>" . $row["name"] . "</td>";
-                            echo "<td>" . $row["surname"] . "</td>";
-                            echo "<td>" . $row["email"] . "</td>";
-                            echo "</tr>";
-                            }
-                        } else {
-                            echo "<tr><td colspan='3'>No results found</td></tr>";
-                        }
-                    ?> -->
                 </tbody>
             </table>    
         </div>
     </div>
+<script src="scripts/send_pokes.js"></script>    
 </body>
 </html>
