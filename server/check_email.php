@@ -3,7 +3,7 @@
 /**
  * User Registration Page
  *
- * This file contains the code for checking if email is existing in database,
+ * This file contains the code for checking if email is existing in database
  *
  * PHP version 7.4
  *
@@ -13,7 +13,7 @@
  * @license  No License
  * @link     No link
  */
-require_once './server/config.php'; // include database connection
+require 'config.php'; // include database connection
 
 if (isset($_POST['email'])) {
 
@@ -28,7 +28,8 @@ if (isset($_POST['email'])) {
         echo 'false';
     } else {
         echo 'true';
-
         exit();
     }
 }
+
+?>

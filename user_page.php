@@ -1,44 +1,23 @@
 <?php
 
-session_start();
+/**
+ * Users Information Page
+ *
+ * This file contains the code for user registration and signin form
+ *
+ * PHP version 7.4
+ *
+ * @category No_Category
+ * @package  No_Package
+ * @author   Mindaugas Kvedaras <kvedaras.mindaugas@gmail.com>
+ * @license  No License
+ * @link     No link
+ */
 
-foreach (glob("./server/*.php") as $filename) {
-    include $filename;
-}
-
-if (isset($_POST['recipient'])) {
-
-    // // Set the timezone to your local timezone
-    // date_default_timezone_set('Lithuania/Kaunas');
-
-    // // Get the current date and time in the local timezone
-    // $sending_date = date('Y-m-d H:i:s');
-    // The key exists, so it's safe to access it
-    $recipient = $_POST['recipient'];
-    $message = $_SESSION['user_name'] . ' ' . $_POST['message'];
-    $sending_date = $_POST['sending_date'];
-
-
-
-
-    if (!filter_var($recipient, FILTER_VALIDATE_EMAIL)) {
-        http_response_code(400);
-        exit();
-    }
-    
-    try {
-        $stmt = $pdo->prepare('INSERT INTO poke_history (sender_email, recipient_email, message, date) VALUES (?, ?, ?, ?)');
-        $stmt->execute([$sender_email, $recipient, $message, $sending_date]);
-        http_response_code(200);
-    } catch (PDOException $e) {
-        http_response_code(500);
-        exit();
-    }
-
-} else {
-    // The key doesn't exist, so you might want to handle the error here
-    $error =  "Error: recipient key not found in POST data";
-}
+require 'server/signin_register.php';
+require './server/user_id.php';
+require './server/count_pokes.php';
+require './server/sent_poke.php';
 
 ?>
 
@@ -49,13 +28,15 @@ if (isset($_POST['recipient'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>user page</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.form/4.3.0/jquery.form.min.js"></script>
     <link 
-        rel="stylesheet" 
-        href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
+      rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css"
     >
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <link 
+      rel="stylesheet" 
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" 
+    />
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -69,7 +50,12 @@ if (isset($_POST['recipient'])) {
             </h1>
         </div>
         <div>
-            <a href="logout.php" class="button is-primary is-inverted">Atsijungti</a>
+          <a 
+            href="server/logout.php" 
+            class="button is-primary is-inverted"
+          >
+            Atsijungti
+          </a>
         </div>
       </div>  
       <h2 class="subtitle">
@@ -78,17 +64,26 @@ if (isset($_POST['recipient'])) {
     </div>
   </div>
 </section>
-<div class="container is-flex is-justify-content-center custom-height">
-  <div class="table-container">
-    <div class="field">
-      <div class="control has-icons-left">
-        <input id="search-input" class="input is-success" type="text" placeholder="Ieškoti vartotojų">
-        <span class="icon is-left has-text-success">
-          <i class="fas fa-search"></i>
-        </span>
-      </div>
+<div class="container is-flex is-flex-direction-column custom-height">
+  <div class="field">
+    <div class="control has-icons-left">
+      <input 
+        id="search-input" 
+        class="input is-success" 
+        type="text" 
+        placeholder="Ieškoti vartotojų"
+      >
+      <span class="icon is-left has-text-success">
+        <i class="fas fa-search"></i>
+      </span>
     </div>
-    <table class="table is-striped is-fullwidth is-hoverable is-centered" id="user-table" style="min-width:800px;">
+  </div>
+  <div class="table-container">
+    <table 
+      class="table is-striped is-fullwidth is-hoverable is-centered" 
+      id="myTable" 
+      style="min-width:800px;"
+    >
       <thead class="has-background-success">
         <tr>
           <th class="has-text-white">ID</th>
@@ -100,30 +95,16 @@ if (isset($_POST['recipient'])) {
           <th class="has-text-white">Išsiųsti el. laišką</th>
         </tr>
       </thead>
-        <tbody id="user-table-body">
-          <?php foreach ($users as $user): ?>
-            <tr>
-              <td><?php echo $user['user_id']; ?></td>
-              <td><?php echo $user['name']; ?></td>
-              <td><?php echo $user['surname']; ?></td>
-              <td><?php echo $user['email']; ?></td>
-              <td><?php echo isset($count_map[$user['email']]) ? $count_map[$user['email']] : 0; ?></td>
-              <td>
-                <?php 
-                  $count = 0;
-                foreach ($email_counts as $email_count) {
-                    $count = $email_count['sender_email'] === $user['email'] ? $email_count['count'] : $count;
-                }
-                    echo $count;
-                ?>
-              </td>
-              <td>
-                <button class="button is-primary send-email-button" id="email-btn" type="submit" data-recipient="<?php echo $user['email']; ?>">Send Email</button>
-              </td>
-            </tr>
-          <?php endforeach; ?>
+        <tbody id="tableBody">
         </tbody>
-    </table>    
+    </table>
+    <nav 
+      id="pagination" 
+      class="pagination is-flex is-justify-content-center" 
+      role="navigation" 
+      aria-label="pagination"
+    >
+    </nav>   
   </div>
 </div>
   <div id="success-modal" class="modal">
@@ -135,10 +116,8 @@ if (isset($_POST['recipient'])) {
         </div>
       </article>
     </div>
-</div>  
-
-<script src="scripts/send_pokes.js"></script>
-<script src="scripts/search_users.js"></script>    
+</div> 
+<script src="scripts/search_paginate_poke.js"></script>
 
 </body>
 </html>

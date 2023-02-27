@@ -1,5 +1,19 @@
 <?php
 
+/**
+ * Server Code for Connection to Database
+ *
+ * This file contains the code for connection to database
+ *
+ * PHP version 7.4
+ *
+ * @category No_Category
+ * @package  No_Package
+ * @author   Mindaugas Kvedaras <kvedaras.mindaugas@gmail.com>
+ * @license  No License
+ * @link     No link
+ */
+
 require_once __DIR__ . '../../vendor/autoload.php';
 
 use Dotenv\Dotenv;

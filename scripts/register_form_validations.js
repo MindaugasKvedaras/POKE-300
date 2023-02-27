@@ -41,7 +41,7 @@ $(document).ready(function() {
         required: true,
         email: true,
         remote: {
-            url: 'check_email.php',
+            url: './server/check_email.php',
             type: 'post',
         }
       },
@@ -95,7 +95,7 @@ $(document).ready(function() {
       // submit the form data
       $.ajax({
         type: 'POST',
-        url: 'register_form.php',
+        url: './register_form.php',
         data: formData,
         success: function(response) {
           // display success message

@@ -1,5 +1,18 @@
 <?php
 
+/**
+ * Server Code for Counting Pokes
+ *
+ * This file contains the code for counting the pokes has been sent for the users
+ *
+ * PHP version 7.4
+ *
+ * @category No_Category
+ * @package  No_Package
+ * @author   Mindaugas Kvedaras <kvedaras.mindaugas@gmail.com>
+ * @license  No License
+ * @link     No link
+ */
 require 'config.php';
 
 // // Prepare the query to count the number of emails received by each user
