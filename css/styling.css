@@ -12,6 +12,7 @@ body{
 .input{
    background: linear-gradient(to right, rgba(177, 194, 179, 0.2), rgba(220, 235, 219, 0.7));
    border-color: black;
+   min-width: 360px;
 }
 
 .pointer{
@@ -35,7 +36,6 @@ body{
 }
 
 .navbar {
-   max-width: 1350px;
    padding: 10px;
    margin: auto;
 }

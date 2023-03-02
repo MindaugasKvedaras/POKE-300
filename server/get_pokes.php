@@ -34,18 +34,23 @@ try {
 
     $pokes = '';
 
-    foreach ($data as $item) {
-        $pokes .= '<a class="notification-item has-text-black">';
-        $pokes .= '<div class="media">';
-        $pokes .= '<div class="media-content has-text-black">';
-        $pokes .= '<p class="title is-5">' . $item['message'] . '</p>';
-        $pokes .= '<p class="subtitle is-7">' . $item['sender_email'] . '</p>';
-        $pokes .= '<p class="subtitle is-6">' . $item['date'] . '</p>';
-        $pokes .= '</div>';
-        $pokes .= '</div>';
-        $pokes .= '<hr class="navbar-divider">';
-        $pokes .= '</a>';
+    if (count($data) === 0) {
+        $pokes = '<p>Šiuo metu neturite pranešimų...</p>';
+    } else {
+        foreach ($data as $item) {
+            $pokes .= '<a class="notification-item has-text-black">';
+            $pokes .= '<div class="media">';
+            $pokes .= '<div class="media-content has-text-black">';
+            $pokes .= '<p class="title is-5">' . $item['message'] . '</p>';
+            $pokes .= '<p class="subtitle is-7">' . $item['sender_email'] . '</p>';
+            $pokes .= '<p class="subtitle is-6">' . $item['date'] . '</p>';
+            $pokes .= '</div>';
+            $pokes .= '</div>';
+            $pokes .= '<hr class="navbar-divider">';
+            $pokes .= '</a>';
+        }
     }
+    
 
     // Return data as JSON
     $response = array('pokes' => $pokes, 'count' => count($data));

@@ -28,7 +28,6 @@ $(document).ready(function() {
       data: { searchTerm: searchTerm },
       dataType: 'json',
       success: function(response) {
-        console.log('text');
         // Update the notification count
         $('#notifications-dropdown').html(response.pokes);
         $('#pokes').text(response.count);
@@ -90,5 +89,5 @@ $(document).ready(function() {
         alert('Error sending email: ' + error);
       }
     });
-  }); 
+  });
 });
