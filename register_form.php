@@ -38,7 +38,7 @@
         rel="stylesheet" 
         href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css"
     >
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="css/styling.css">
 </head>
 
 <body>
@@ -56,7 +56,6 @@
           <div 
             class="column is-one-third" 
             id="form-container" 
-            style="min-width:450px;"
           >
             <div class="container mb-4 has-text-centered">
               <h1 class="title has-text-success" id="form-title">PRISIJUNGIMAS</h1>

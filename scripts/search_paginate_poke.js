@@ -6,7 +6,7 @@ $(document).ready(function() {
 	var rowsPerPage = 10; // Number of rows to display per page
 	var currentPage = 1; // Current page number
   var searchTerm = ''; // Search term
-	
+
 	function loadTableData(page, searchTerm) {
 	  $.ajax({
 		  url: './server/users_db.php',
@@ -19,8 +19,28 @@ $(document).ready(function() {
 		  }
 	  });
 	}
+
+  function fetchNotifications(searchTerm) {
+    // Send an AJAX request to retrieve data from the server
+    $.ajax({
+      url: './server/get_pokes.php',
+      method: 'GET',
+      data: { searchTerm: searchTerm },
+      dataType: 'json',
+      success: function(response) {
+        console.log('text');
+        // Update the notification count
+        $('#notifications-dropdown').html(response.pokes);
+        $('#pokes').text(response.count);
+      },
+      error: function(xhr, status, error) {
+        console.error('AJAX error: ' + status + ' ' + error);
+      }
+    });
+} 
 	
 	loadTableData(currentPage, searchTerm); // Load initial table data
+  fetchNotifications();// Load notifications
 	
 	// Pagination click event
 	pagination.on('click', '.pagination-link', function(event) {
@@ -32,7 +52,7 @@ $(document).ready(function() {
   // Search input keyup event
   $('#search-input').on('keyup', function() {
     searchTerm = $(this).val();
-    loadTableData(currentPage, searchTerm);
+    loadTableData(1, searchTerm);
   });
 
 	table.on('click', '#email-btn', function() {
@@ -62,6 +82,7 @@ $(document).ready(function() {
       var paginglink = pagination.find('#paging');
       var value = parseInt(paginglink.attr('data-page'));
       loadTableData(value, searchTerm);
+      fetchNotifications(searchTerm);
             
       },
       error: function(xhr, status, error) {

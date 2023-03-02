@@ -48,6 +48,7 @@ if (isset($_POST['signin'])) {
     if ($result) {
         $_SESSION['user_id'] = $result['user_id'];
         $_SESSION['user_name'] = $result['name'];
+        $_SESSION['email'] = $result['email'];
         header('location:user_page.php');
     } else {
         $error = 'Blogi prisijungimo duomenys';

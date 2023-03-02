@@ -13,8 +13,7 @@
  * @license  No License
  * @link     No link
  */
-
-require 'server/signin_register.php';
+session_start();
 require './server/user_id.php';
 require './server/count_pokes.php';
 require './server/sent_poke.php';
@@ -32,92 +31,123 @@ require './server/sent_poke.php';
       rel="stylesheet" 
       href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css"
     >
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <link 
       rel="stylesheet" 
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.2/css/all.min.css" 
-    />
-    <link rel="stylesheet" href="css/styles.css">
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css" 
+      integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ==" 
+      crossorigin="anonymous" 
+      referrerpolicy="no-referrer" 
+    />   
+    <link rel="stylesheet" href="css/styling.css">
 </head>
 <body>
-<section class="hero is-success mb-4">
-  <div class="hero-body">
+  <nav class="navbar has-background-success is-small mb-6">
     <div class="container">
-      <div class="container is-flex is-justify-content-space-between">
+      <div class="container is-flex is-flex-wrap is-justify-content-space-between is-align-items-center">
         <div>
-            <h1 class="title">
-                Sveiki, <span><?php echo $sender_name ?></span>
-            </h1>
+          <h1 class="title has-text-white">
+            Sveiki, <span><?php echo $sender_name ?></span>
+          </h1>
         </div>
-        <div>
-          <a 
-            href="server/logout.php" 
-            class="button is-primary is-inverted"
-          >
-            Atsijungti
-          </a>
+        <div class="is-flex is-align-items-center is-justify-content-flex-end">
+          <div class="navbar-item navbar-padding">
+            <div class="buttons">
+              <div class="nav has-dropdown is-right" id="message-dropdown">
+                <button 
+                  class="navbar-button button is-success is-inverted" 
+                  id="message-button" 
+                  data-button-name="Pranešimai"
+                >
+                  <i class="fas fa-bell"></i>
+                  <span 
+                    class="tag has-background-primary-dark has-text-white is-rounded" 
+                    id="pokes"
+                  >
+                  //Here appears the number of notifications
+                  </span>
+                </button>
+                <div 
+                  class="navbar-dropdown is-right is-boxed has-background-success-light" 
+                  id="notifications-dropdown">
+                  //Here appears notifications
+                </div>
+              </div>
+              <button 
+                class="navbar-button button is-success is-inverted" 
+                data-button-name="Profilis"
+              >
+                <i class="fas fa-user"></i>
+              </button>
+              <a 
+                href="server/logout.php" 
+                class="navbar-button button is-success is-inverted" 
+                data-button-name="Atsijungti"
+              >
+                <i class="fas fa-arrow-right-from-bracket"></i>
+              </a>
+            </div>
+          </div>
         </div>
-      </div>  
-      <h2 class="subtitle">
-        Žemiau yra pateikta visų prisiregistravusių vartotojų lentelė
-      </h2>
+      </div>
     </div>
-  </div>
-</section>
-<div class="container is-flex is-flex-direction-column custom-height">
-  <div class="field">
-    <div class="control has-icons-left">
-      <input 
-        id="search-input" 
-        class="input is-success" 
-        type="text" 
-        placeholder="Ieškoti vartotojų"
-      >
-      <span class="icon is-left has-text-success">
-        <i class="fas fa-search"></i>
-      </span>
-    </div>
-  </div>
-  <div class="table-container">
-    <table 
-      class="table is-striped is-fullwidth is-hoverable is-centered" 
-      id="myTable" 
-      style="min-width:800px;"
-    >
-      <thead class="has-background-success">
-        <tr>
-          <th class="has-text-white">ID</th>
-          <th class="has-text-white">Vardas</th>
-          <th class="has-text-white">Pavardė</th>
-          <th class="has-text-white">El. paštas</th>
-          <th class="has-text-white">Pokes(gauti)</th>
-          <th class="has-text-white">Pokes(išsiųsti)</th>
-          <th class="has-text-white">Išsiųsti el. laišką</th>
-        </tr>
-      </thead>
-        <tbody id="tableBody">
-        </tbody>
-    </table>
-    <nav 
-      id="pagination" 
-      class="pagination is-flex is-justify-content-center" 
-      role="navigation" 
-      aria-label="pagination"
-    >
-    </nav>   
-  </div>
-</div>
-  <div id="success-modal" class="modal">
-    <div class="modal-background"></div>
-    <div class="modal-content has-text-centered">
-      <article class="message is-success">
-        <div class="message-body">
-            <p class="is-size-3">Žinutė sėkmingai išsiųsta!</p>
-        </div>
-      </article>
-    </div>
-</div> 
-<script src="scripts/search_paginate_poke.js"></script>
+  </nav>
 
+  <div class="container is-flex is-flex-direction-column custom-height">
+    <div class="field">
+      <div class="control has-icons-left">
+        <input 
+          id="search-input" 
+          class="input is-success" 
+          type="text" 
+          placeholder="Ieškoti vartotojų"
+        >
+        <span class="icon is-left has-text-success">
+          <i class="fas fa-search"></i>
+        </span>
+      </div>
+    </div>
+    <div class="table-container">
+      <table 
+        class="table is-striped is-fullwidth is-hoverable is-centered" 
+        id="myTable" 
+        style="min-width:600px;"
+      >
+        <thead class="has-background-success">
+          <tr>
+            <th class="has-text-white">ID</th>
+            <th class="has-text-white">Vardas</th>
+            <th class="has-text-white">Pavardė</th>
+            <th class="has-text-white">El. paštas</th>
+            <th class="has-text-white">Pokes(gauti)</th>
+            <th class="has-text-white">Pokes(išsiųsti)</th>
+            <th class="has-text-white">Išsiųsti el. laišką</th>
+          </tr>
+        </thead>
+          <tbody id="tableBody">
+            //Here appears user table
+          </tbody>
+      </table>
+      <nav 
+        id="pagination" 
+        class="pagination is-flex is-justify-content-center" 
+        role="navigation" 
+        aria-label="pagination"
+      >
+      </nav>   
+    </div>
+  </div>
+    <div id="success-modal" class="modal">
+      <div class="modal-background"></div>
+      <div class="modal-content has-text-centered">
+        <article class="message is-success">
+          <div class="message-body">
+              <p class="is-size-3">Žinutė sėkmingai išsiųsta!</p>
+          </div>
+        </article>
+      </div>
+  </div>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="scripts/search_paginate_poke.js"></script>
+<script src="scripts/notification_toggling.js"></script>
 </body>
 </html>

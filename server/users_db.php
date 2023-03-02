@@ -10,7 +10,7 @@
  * @category No_Category
  * @package  No_Package
  * @author   Mindaugas Kvedaras <kvedaras.mindaugas@gmail.com>
- * @license  No License
+ * @license  No License  
  * @link     No link
  */
 
@@ -24,13 +24,21 @@ if (!isset($_SESSION['user_id'])) {
     header('location:register_form.php');
 }
 
-$page = $_POST['page'];
-$rowsPerPage = $_POST['rowsPerPage'];
-$searchTerm = $_POST['searchTerm'];
+$page = isset($_POST['page']) ? $_POST['page'] : 1;
+$rowsPerPage = isset($_POST['rowsPerPage']) ? $_POST['rowsPerPage'] : 10;
+$searchTerm = isset($_POST['searchTerm']) ? $_POST['searchTerm'] : '';
+$user_email = $_SESSION['email'];
 
 // Calculate limit and offset for SQL query
 $limit = $rowsPerPage;
 $offset = ($page - 1) * $rowsPerPage;
+
+if ($page === "1") {
+    $searchTerm = $_POST['searchTerm'];
+    $_SESSION['searchTerm'] = $searchTerm;
+} else {
+    $searchTerm = $_POST['searchTerm'];
+}
 
 // Build SQL query based on search term
 $sql = "SELECT * FROM user_form";
@@ -82,10 +90,11 @@ for ($i = 1; $i <= $numPages; $i++) {
     }
 }
 
+
 // Return JSON response
 $response = array(
   'tableRows' => $tableRows,
-  'pagination' => $pagination
+  'pagination' => $pagination,
 );
 echo json_encode($response);
 
