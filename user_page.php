@@ -124,7 +124,6 @@ require './server/sent_poke.php';
           </tr>
         </thead>
           <tbody id="tableBody">
-            //Here appears user table
           </tbody>
       </table>
       <nav 
