@@ -13,6 +13,21 @@ $surname = $_POST['surname'];
 $password = $_POST['password'];
 
 try {
+    // Create a prepared statement to get the user's current data from the database
+    $stmt = $pdo->prepare('SELECT * FROM user_form WHERE user_id = :id');
+    $stmt->bindParam(':id', $user_id);
+    $stmt->execute();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Check if the submitted password value is the same as the hashed password value in the database
+    if ($password === $user['password']) {
+        // If the password value is the same, use the existing hashed password value
+        $password = $user['password'];
+    } else {
+        // If the password value is different, hash the submitted password value
+        $password = md5($password);
+    }
+
     // Create a prepared statement to update data in database
     $stmt = $pdo->prepare('UPDATE user_form SET name = :name, surname = :surname, password = :password WHERE user_id = :id');
 
@@ -48,4 +63,5 @@ try {
     header('Content-Type: application/json');
     echo json_encode($response);
 }
+
 ?>
