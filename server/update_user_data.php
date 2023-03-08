@@ -1,5 +1,17 @@
 <?php
-
+/**
+ * Server Code for Profile Info Update
+ *
+ * This file contains the code for updating users profile data in database
+ *
+ * PHP version 7.4
+ *
+ * @category No_Category
+ * @package  No_Package
+ * @author   Mindaugas Kvedaras <kvedaras.mindaugas@gmail.com>
+ * @license  No License
+ * @link     No link
+ */
 require 'config.php';
 
 session_start();

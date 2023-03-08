@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Server Code for Sign Up and Sign In
  *
@@ -14,7 +13,6 @@
  * @license  No License
  * @link     No link
  */
-
 require 'config.php';
 session_start();
 
@@ -54,5 +52,4 @@ if (isset($_POST['signin'])) {
         $error = 'Blogi prisijungimo duomenys';
     }
 }
-
 ?>

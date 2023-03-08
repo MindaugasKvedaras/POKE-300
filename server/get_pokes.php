@@ -40,18 +40,34 @@ try {
         foreach ($data as $item) {
             $pokes .= '<a class="notification-item has-text-black">';
             $pokes .= '<div class="media">';
-            $pokes .= '<div class="media-content has-text-black">';
-            $pokes .= '<p class="title is-5">' . $item['message'] . '</p>';
-            $pokes .= '<p class="subtitle is-7">' . $item['sender_email'] . '</p>';
-            $pokes .= '<p class="subtitle is-6">' . $item['date'] . '</p>';
+            $pokes .= '<figure class="media-left">';
+            $pokes .= '<p class="image is-96x92 is-rounded">';
+            $pokes .= '<img src="https://w7.pngwing.com/pngs/481/915/png-transparent-computer-icons-user-avatar-woman-avatar-computer-business-conversation.png">';
+            $pokes .= '</p>';
+            $pokes .= '</figure>';
+            $pokes .= '<div class="media-content">';
+            $pokes .= '<div class="content">';
+            $pokes .= '<p>' . '<strong>' . $item['sender_email']. '</strong>' . '</p>';
+            $pokes .= '<p>' . $item['message'] . '</p>';
+            $pokes .= '<small>' . $item['date'] . '</small>';
             $pokes .= '</div>';
             $pokes .= '</div>';
-            $pokes .= '<hr class="navbar-divider">';
+            $pokes .= '</div>';
+            $pokes .= '<hr class="has-background-grey-lighter">';
             $pokes .= '</a>';
+
+
+            // $pokes .= '<div class="media-content has-text-black">';
+            // $pokes .= '<p class="title is-5">' . $item['message'] . '</p>';
+            // $pokes .= '<p class="subtitle is-7">' . $item['sender_email'] . '</p>';
+            // $pokes .= '<p class="subtitle is-6">' . $item['date'] . '</p>';
+            // $pokes .= '</div>';
+            // $pokes .= '</p>';
+            // $pokes .= '<hr class="navbar-divider">';
+            // $pokes .= '</a>';
         }
     }
     
-
     // Return data as JSON
     $response = array('pokes' => $pokes, 'count' => count($data));
     // header('Content-Type: application/json');

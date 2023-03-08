@@ -43,7 +43,7 @@ require './server/sent_poke.php';
       crossorigin="anonymous" 
       referrerpolicy="no-referrer" 
     />   
-    <link rel="stylesheet" href="css/styling.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
   <nav class="navbar has-background-success is-small mb-6">
@@ -68,13 +68,11 @@ require './server/sent_poke.php';
                     class="tag has-background-primary-dark has-text-white is-rounded" 
                     id="pokes"
                   >
-                  //Here appears the number of notifications
                   </span>
                 </button>
                 <div 
                   class="navbar-dropdown is-right is-boxed has-background-success-light" 
                   id="notifications-dropdown">
-                  //Here appears notifications
                 </div>
               </div>
               <button 
