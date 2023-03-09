@@ -14,22 +14,31 @@
  * @link     No link
  */
 
-require_once __DIR__ . '../../vendor/autoload.php';
+// require_once __DIR__ . '../../vendor/autoload.php';
 
-use Dotenv\Dotenv;
-// Load environment variables from .env file
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+// use Dotenv\Dotenv;
+// // Load environment variables from .env file
+// $dotenv = Dotenv::createImmutable(__DIR__);
+// $dotenv->load();
 
-// Get database connection details from environment variables
-$db_host = $_ENV['DB_HOST'];
-$db_name = $_ENV['DB_NAME'];
-$db_user = $_ENV['DB_USER'];
-$db_pass = $_ENV['DB_PASS'];
+// // Get database connection details from environment variables
+// $db_host = $_ENV['DB_HOST'];
+// $db_name = $_ENV['DB_NAME'];
+// $db_user = $_ENV['DB_USER'];
+// $db_pass = $_ENV['DB_PASS'];
+
+//Get Heroku ClearDB connection information
+$cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL"));
+$cleardb_server = $cleardb_url["host"];
+$cleardb_username = $cleardb_url["user"];
+$cleardb_password = $cleardb_url["pass"];
+$cleardb_db = substr($cleardb_url["path"], 1);
+$active_group = 'default';
+$query_builder = true;
 
 try {
     // Connect to the database using PDO
-    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
+    $pdo = new PDO("mysql:host=$cleardb_server;dbname=$cleardb_db", $cleardb_username, $cleardb_password);
 } catch (PDOException $e) {
     // Handle the error
     echo 'Connection failed: ' . $e->getMessage();
