@@ -28,20 +28,16 @@
 // $db_pass = $_ENV['DB_PASS'];
 
 //Get Heroku ClearDB connection information
-$cleardb_url = parse_url(getenv("CLEARDB_DATABASE_URL"));
-$cleardb_server = $cleardb_url["host"];
-$cleardb_username = $cleardb_url["user"];
-$cleardb_password = $cleardb_url["pass"];
-$cleardb_db = substr($cleardb_url["path"], 1);
-
-$active_group = 'default';
-$query_builder = true;
-
-
+$db_url = getenv('CLEARDB_DATABASE_URL');
+$db_parts = parse_url($db_url);
+$db_host = $db_parts['host'];
+$db_name = ltrim($db_parts['path'], '/');
+$db_user = $db_parts['user'];
+$db_pass = $db_parts['pass'];
 
 try {
     // Connect to the database using PDO
-    $pdo = new PDO($cleardb_server, $cleardb_db, $cleardb_username, $cleardb_password);
+    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
 } catch (PDOException $e) {
     // Handle the error
     echo 'Connection failed: ' . $e->getMessage();
