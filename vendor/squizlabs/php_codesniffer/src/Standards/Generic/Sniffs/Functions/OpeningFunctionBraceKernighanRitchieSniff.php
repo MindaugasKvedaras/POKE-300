@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Checks that the opening brace of a function is on the same line as the function declaration.
  *
@@ -16,6 +15,7 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class OpeningFunctionBraceKernighanRitchieSniff implements Sniff
 {
+
     /**
      * Should this sniff check function braces?
      *
@@ -42,6 +42,7 @@ class OpeningFunctionBraceKernighanRitchieSniff implements Sniff
             T_FUNCTION,
             T_CLOSURE,
         ];
+
     }//end register()
 
 
@@ -62,8 +63,7 @@ class OpeningFunctionBraceKernighanRitchieSniff implements Sniff
             return;
         }
 
-        if (
-            ($tokens[$stackPtr]['code'] === T_FUNCTION
+        if (($tokens[$stackPtr]['code'] === T_FUNCTION
             && (bool) $this->checkFunctions === false)
             || ($tokens[$stackPtr]['code'] === T_CLOSURE
             && (bool) $this->checkClosures === false)
@@ -103,16 +103,14 @@ class OpeningFunctionBraceKernighanRitchieSniff implements Sniff
                 $phpcsFile->fixer->beginChangeset();
                 $phpcsFile->fixer->addContent($prev, ' {');
                 $phpcsFile->fixer->replaceToken($openingBrace, '');
-                if (
-                    $tokens[($openingBrace + 1)]['code'] === T_WHITESPACE
+                if ($tokens[($openingBrace + 1)]['code'] === T_WHITESPACE
                     && $tokens[($openingBrace + 2)]['line'] > $tokens[$openingBrace]['line']
                 ) {
                     // Brace is followed by a new line, so remove it to ensure we don't
                     // leave behind a blank line at the top of the block.
                     $phpcsFile->fixer->replaceToken(($openingBrace + 1), '');
 
-                    if (
-                        $tokens[($openingBrace - 1)]['code'] === T_WHITESPACE
+                    if ($tokens[($openingBrace - 1)]['code'] === T_WHITESPACE
                         && $tokens[($openingBrace - 1)]['line'] === $tokens[$openingBrace]['line']
                         && $tokens[($openingBrace - 2)]['line'] < $tokens[$openingBrace]['line']
                     ) {
@@ -132,8 +130,7 @@ class OpeningFunctionBraceKernighanRitchieSniff implements Sniff
         $ignore[] = T_WHITESPACE;
         $next     = $phpcsFile->findNext($ignore, ($openingBrace + 1), null, true);
         if ($tokens[$next]['line'] === $tokens[$openingBrace]['line']) {
-            if (
-                $next === $tokens[$stackPtr]['scope_closer']
+            if ($next === $tokens[$stackPtr]['scope_closer']
                 || $tokens[$next]['code'] === T_CLOSE_TAG
             ) {
                 // Ignore empty functions.
@@ -162,7 +159,7 @@ class OpeningFunctionBraceKernighanRitchieSniff implements Sniff
 
         if ($tokens[($openingBrace - 1)]['code'] !== T_WHITESPACE) {
             $length = 0;
-        } elseif ($spacing === "\t") {
+        } else if ($spacing === "\t") {
             $length = '\t';
         } else {
             $length = strlen($spacing);
@@ -180,5 +177,8 @@ class OpeningFunctionBraceKernighanRitchieSniff implements Sniff
                 }
             }
         }
+
     }//end process()
+
+
 }//end class

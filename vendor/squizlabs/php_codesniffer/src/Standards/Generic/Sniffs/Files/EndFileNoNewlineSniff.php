@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Ensures the file does not end with a newline character.
  *
@@ -15,6 +14,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class EndFileNoNewlineSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -38,6 +38,7 @@ class EndFileNoNewlineSniff implements Sniff
             T_OPEN_TAG,
             T_OPEN_TAG_WITH_ECHO,
         ];
+
     }//end register()
 
 
@@ -83,5 +84,8 @@ class EndFileNoNewlineSniff implements Sniff
 
         // Ignore the rest of the file.
         return ($phpcsFile->numTokens + 1);
+
     }//end process()
+
+
 }//end class

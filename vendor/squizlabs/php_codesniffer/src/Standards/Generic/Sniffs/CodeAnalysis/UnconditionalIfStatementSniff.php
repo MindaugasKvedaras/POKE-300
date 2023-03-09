@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Detects unconditional if- and elseif-statements.
  *
@@ -33,6 +32,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class UnconditionalIfStatementSniff implements Sniff
 {
+
+
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -44,6 +45,7 @@ class UnconditionalIfStatementSniff implements Sniff
             T_IF,
             T_ELSEIF,
         ];
+
     }//end register()
 
 
@@ -75,7 +77,7 @@ class UnconditionalIfStatementSniff implements Sniff
 
             if (isset(Tokens::$emptyTokens[$code]) === true) {
                 continue;
-            } elseif ($code !== T_TRUE && $code !== T_FALSE) {
+            } else if ($code !== T_TRUE && $code !== T_FALSE) {
                 $goodCondition = true;
             }
         }
@@ -84,5 +86,8 @@ class UnconditionalIfStatementSniff implements Sniff
             $error = 'Avoid IF statements that are always true or false';
             $phpcsFile->addWarning($error, $stackPtr, 'Found');
         }
+
     }//end process()
+
+
 }//end class

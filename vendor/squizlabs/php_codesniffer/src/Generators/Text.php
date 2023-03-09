@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A doc generator that outputs text-based documentation.
  *
@@ -14,6 +13,8 @@ namespace PHP_CodeSniffer\Generators;
 
 class Text extends Generator
 {
+
+
     /**
      * Process the documentation for a single sniff.
      *
@@ -30,10 +31,11 @@ class Text extends Generator
         foreach ($doc->childNodes as $node) {
             if ($node->nodeName === 'standard') {
                 $this->printTextBlock($node);
-            } elseif ($node->nodeName === 'code_comparison') {
+            } else if ($node->nodeName === 'code_comparison') {
                 $this->printCodeComparisonBlock($node);
             }
         }
+
     }//end processSniff()
 
 
@@ -53,9 +55,10 @@ class Text extends Generator
 
         echo PHP_EOL;
         echo str_repeat('-', (strlen("$standard CODING STANDARD: $title") + 4));
-        echo strtoupper(PHP_EOL . "| $standard CODING STANDARD: $title |" . PHP_EOL);
+        echo strtoupper(PHP_EOL."| $standard CODING STANDARD: $title |".PHP_EOL);
         echo str_repeat('-', (strlen("$standard CODING STANDARD: $title") + 4));
-        echo PHP_EOL . PHP_EOL;
+        echo PHP_EOL.PHP_EOL;
+
     }//end printTitle()
 
 
@@ -87,19 +90,19 @@ class Text extends Generator
             $words    = explode(' ', $currentLine);
 
             foreach ($words as $word) {
-                $currentLength = strlen($tempLine . $word);
+                $currentLength = strlen($tempLine.$word);
                 if ($currentLength < 99) {
-                    $tempLine .= $word . ' ';
+                    $tempLine .= $word.' ';
                     continue;
                 }
 
                 if ($currentLength === 99 || $currentLength === 100) {
                     // We are already at the edge, so we are done.
-                    $lines[]  = $tempLine . $word;
+                    $lines[]  = $tempLine.$word;
                     $tempLine = '';
                 } else {
                     $lines[]  = rtrim($tempLine);
-                    $tempLine = $word . ' ';
+                    $tempLine = $word.' ';
                 }
             }//end foreach
 
@@ -108,7 +111,8 @@ class Text extends Generator
             }
         }//end foreach
 
-        echo implode(PHP_EOL, $lines) . PHP_EOL . PHP_EOL;
+        echo implode(PHP_EOL, $lines).PHP_EOL.PHP_EOL;
+
     }//end printTextBlock()
 
 
@@ -130,22 +134,22 @@ class Text extends Generator
         $words           = explode(' ', $firstTitle);
 
         foreach ($words as $word) {
-            if (strlen($tempTitle . $word) >= 45) {
-                if (strlen($tempTitle . $word) === 45) {
+            if (strlen($tempTitle.$word) >= 45) {
+                if (strlen($tempTitle.$word) === 45) {
                     // Adding the extra space will push us to the edge
                     // so we are done.
-                    $firstTitleLines[] = $tempTitle . $word;
+                    $firstTitleLines[] = $tempTitle.$word;
                     $tempTitle         = '';
-                } elseif (strlen($tempTitle . $word) === 46) {
+                } else if (strlen($tempTitle.$word) === 46) {
                     // We are already at the edge, so we are done.
-                    $firstTitleLines[] = $tempTitle . $word;
+                    $firstTitleLines[] = $tempTitle.$word;
                     $tempTitle         = '';
                 } else {
                     $firstTitleLines[] = $tempTitle;
-                    $tempTitle         = $word . ' ';
+                    $tempTitle         = $word.' ';
                 }
             } else {
-                $tempTitle .= $word . ' ';
+                $tempTitle .= $word.' ';
             }
         }//end foreach
 
@@ -165,22 +169,22 @@ class Text extends Generator
         $words            = explode(' ', $secondTitle);
 
         foreach ($words as $word) {
-            if (strlen($tempTitle . $word) >= 45) {
-                if (strlen($tempTitle . $word) === 45) {
+            if (strlen($tempTitle.$word) >= 45) {
+                if (strlen($tempTitle.$word) === 45) {
                     // Adding the extra space will push us to the edge
                     // so we are done.
-                    $secondTitleLines[] = $tempTitle . $word;
+                    $secondTitleLines[] = $tempTitle.$word;
                     $tempTitle          = '';
-                } elseif (strlen($tempTitle . $word) === 46) {
+                } else if (strlen($tempTitle.$word) === 46) {
                     // We are already at the edge, so we are done.
-                    $secondTitleLines[] = $tempTitle . $word;
+                    $secondTitleLines[] = $tempTitle.$word;
                     $tempTitle          = '';
                 } else {
                     $secondTitleLines[] = $tempTitle;
-                    $tempTitle          = $word . ' ';
+                    $tempTitle          = $word.' ';
                 }
             } else {
-                $tempTitle .= $word . ' ';
+                $tempTitle .= $word.' ';
             }
         }//end foreach
 
@@ -197,7 +201,7 @@ class Text extends Generator
 
         echo str_repeat('-', 41);
         echo ' CODE COMPARISON ';
-        echo str_repeat('-', 42) . PHP_EOL;
+        echo str_repeat('-', 42).PHP_EOL;
 
         for ($i = 0; $i < $maxTitleLines; $i++) {
             if (isset($firstTitleLines[$i]) === true) {
@@ -213,13 +217,13 @@ class Text extends Generator
             }
 
             echo '| ';
-            echo $firstLineText . str_repeat(' ', (46 - strlen($firstLineText)));
+            echo $firstLineText.str_repeat(' ', (46 - strlen($firstLineText)));
             echo ' | ';
-            echo $secondLineText . str_repeat(' ', (47 - strlen($secondLineText)));
-            echo ' |' . PHP_EOL;
+            echo $secondLineText.str_repeat(' ', (47 - strlen($secondLineText)));
+            echo ' |'.PHP_EOL;
         }//end for
 
-        echo str_repeat('-', 100) . PHP_EOL;
+        echo str_repeat('-', 100).PHP_EOL;
 
         for ($i = 0; $i < $maxCodeLines; $i++) {
             if (isset($firstLines[$i]) === true) {
@@ -235,12 +239,15 @@ class Text extends Generator
             }
 
             echo '| ';
-            echo $firstLineText . str_repeat(' ', max(0, (47 - strlen($firstLineText))));
+            echo $firstLineText.str_repeat(' ', max(0, (47 - strlen($firstLineText))));
             echo '| ';
-            echo $secondLineText . str_repeat(' ', max(0, (48 - strlen($secondLineText))));
-            echo '|' . PHP_EOL;
+            echo $secondLineText.str_repeat(' ', max(0, (48 - strlen($secondLineText))));
+            echo '|'.PHP_EOL;
         }//end for
 
-        echo str_repeat('-', 100) . PHP_EOL . PHP_EOL;
+        echo str_repeat('-', 100).PHP_EOL.PHP_EOL;
+
     }//end printCodeComparisonBlock()
+
+
 }//end class

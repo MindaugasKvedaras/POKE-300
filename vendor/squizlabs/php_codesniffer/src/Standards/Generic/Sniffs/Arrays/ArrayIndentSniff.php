@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Ensures that array are indented one tab stop.
  *
@@ -15,6 +14,7 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ArrayIndentSniff extends AbstractArraySniff
 {
+
     /**
      * The number of spaces each array key should be indented.
      *
@@ -38,6 +38,7 @@ class ArrayIndentSniff extends AbstractArraySniff
      */
     public function processSingleLineArray($phpcsFile, $stackPtr, $arrayStart, $arrayEnd, $indices)
     {
+
     }//end processSingleLineArray()
 
 
@@ -139,7 +140,7 @@ class ArrayIndentSniff extends AbstractArraySniff
             $error = 'Closing brace of array declaration must be on a new line';
             $fix   = $phpcsFile->addFixableError($error, $arrayEnd, 'CloseBraceNotNewLine');
             if ($fix === true) {
-                $padding = $phpcsFile->eolChar . str_repeat(' ', $expectedIndent);
+                $padding = $phpcsFile->eolChar.str_repeat(' ', $expectedIndent);
                 $phpcsFile->fixer->addContentBefore($arrayEnd, $padding);
             }
 
@@ -169,5 +170,8 @@ class ArrayIndentSniff extends AbstractArraySniff
         } else {
             $phpcsFile->fixer->replaceToken(($arrayEnd - 1), $padding);
         }
+
     }//end processMultiLineArray()
+
+
 }//end class

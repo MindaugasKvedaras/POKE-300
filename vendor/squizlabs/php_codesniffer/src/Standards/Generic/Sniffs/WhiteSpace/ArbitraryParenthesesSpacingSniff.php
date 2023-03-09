@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Check & fix whitespace on the inside of arbitrary parentheses.
  *
@@ -19,6 +18,7 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class ArbitraryParenthesesSpacingSniff implements Sniff
 {
+
     /**
      * The number of spaces desired on the inside of the parentheses.
      *
@@ -67,6 +67,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
             T_OPEN_PARENTHESIS,
             T_CLOSE_PARENTHESIS,
         ];
+
     }//end register()
 
 
@@ -100,8 +101,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
         }
 
         $preOpener = $phpcsFile->findPrevious(Tokens::$emptyTokens, ($opener - 1), null, true);
-        if (
-            $preOpener !== false
+        if ($preOpener !== false
             && isset($this->ignoreTokens[$tokens[$preOpener]['code']]) === true
             && isset($tokens[$preOpener]['scope_condition']) === false
         ) {
@@ -110,8 +110,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
         }
 
         // Check for empty parentheses.
-        if (
-            $tokens[$stackPtr]['code'] === T_OPEN_PARENTHESIS
+        if ($tokens[$stackPtr]['code'] === T_OPEN_PARENTHESIS
             && isset($tokens[$stackPtr]['parenthesis_closer']) === true
         ) {
             $nextNonEmpty = $phpcsFile->findNext(T_WHITESPACE, ($stackPtr + 1), null, true);
@@ -125,8 +124,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
         // Check the spacing on the inside of the parentheses.
         $this->spacing = (int) $this->spacing;
 
-        if (
-            $tokens[$stackPtr]['code'] === T_OPEN_PARENTHESIS
+        if ($tokens[$stackPtr]['code'] === T_OPEN_PARENTHESIS
             && isset($tokens[($stackPtr + 1)], $tokens[($stackPtr + 2)]) === true
         ) {
             $nextToken = $tokens[($stackPtr + 1)];
@@ -141,8 +139,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
                 }
             }
 
-            if (
-                $this->spacing !== $inside
+            if ($this->spacing !== $inside
                 && ($inside !== 'newline' || $this->ignoreNewlines === false)
             ) {
                 $error = 'Expected %s space after open parenthesis; %s found';
@@ -162,7 +159,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
                         if ($expected !== '') {
                             $phpcsFile->fixer->addContent($stackPtr, $expected);
                         }
-                    } elseif ($inside === 'newline') {
+                    } else if ($inside === 'newline') {
                         $phpcsFile->fixer->beginChangeset();
                         for ($i = ($stackPtr + 2); $i < $phpcsFile->numTokens; $i++) {
                             if ($tokens[$i]['code'] !== T_WHITESPACE) {
@@ -181,8 +178,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
             }//end if
         }//end if
 
-        if (
-            $tokens[$stackPtr]['code'] === T_CLOSE_PARENTHESIS
+        if ($tokens[$stackPtr]['code'] === T_CLOSE_PARENTHESIS
             && isset($tokens[($stackPtr - 1)], $tokens[($stackPtr - 2)]) === true
         ) {
             $prevToken = $tokens[($stackPtr - 1)];
@@ -197,8 +193,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
                 }
             }
 
-            if (
-                $this->spacing !== $inside
+            if ($this->spacing !== $inside
                 && ($inside !== 'newline' || $this->ignoreNewlines === false)
             ) {
                 $error = 'Expected %s space before close parenthesis; %s found';
@@ -218,7 +213,7 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
                         if ($expected !== '') {
                             $phpcsFile->fixer->addContentBefore($stackPtr, $expected);
                         }
-                    } elseif ($inside === 'newline') {
+                    } else if ($inside === 'newline') {
                         $phpcsFile->fixer->beginChangeset();
                         for ($i = ($stackPtr - 2); $i > 0; $i--) {
                             if ($tokens[$i]['code'] !== T_WHITESPACE) {
@@ -236,5 +231,8 @@ class ArbitraryParenthesesSpacingSniff implements Sniff
                 }//end if
             }//end if
         }//end if
+
     }//end process()
+
+
 }//end class

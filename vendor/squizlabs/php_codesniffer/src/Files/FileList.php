@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Represents a list of files on the file system that are to be checked during the run.
  *
@@ -21,6 +20,7 @@ use ReturnTypeWillChange;
 
 class FileList implements \Iterator, \Countable
 {
+
     /**
      * A list of file paths that are included in the list.
      *
@@ -75,7 +75,7 @@ class FileList implements \Iterator, \Countable
             $isPharFile = Util\Common::isPharFile($path);
             if (is_dir($path) === true || $isPharFile === true) {
                 if ($isPharFile === true) {
-                    $path = 'phar://' . $path;
+                    $path = 'phar://'.$path;
                 }
 
                 $filterClass = $this->getFilterClass();
@@ -94,6 +94,7 @@ class FileList implements \Iterator, \Countable
         }//end foreach
 
         reset($this->files);
+
     }//end __construct()
 
 
@@ -108,7 +109,7 @@ class FileList implements \Iterator, \Countable
      *
      * @return void
      */
-    public function addFile($path, $file = null)
+    public function addFile($path, $file=null)
     {
         // No filtering is done for STDIN when the filename
         // has not been specified.
@@ -128,6 +129,7 @@ class FileList implements \Iterator, \Countable
             $this->files[$path] = $file;
             $this->numFiles++;
         }
+
     }//end addFile()
 
 
@@ -148,17 +150,18 @@ class FileList implements \Iterator, \Countable
                 // This is a path to a custom filter class.
                 $filename = realpath($filterType);
                 if ($filename === false) {
-                    $error = "ERROR: Custom filter \"$filterType\" not found" . PHP_EOL;
+                    $error = "ERROR: Custom filter \"$filterType\" not found".PHP_EOL;
                     throw new DeepExitException($error, 3);
                 }
 
                 $filterClass = Autoload::loadFile($filename);
             } else {
-                $filterClass = '\PHP_CodeSniffer\Filters\\' . $filterType;
+                $filterClass = '\PHP_CodeSniffer\Filters\\'.$filterType;
             }
         }
 
         return $filterClass;
+
     }//end getFilterClass()
 
 
@@ -171,6 +174,7 @@ class FileList implements \Iterator, \Countable
     public function rewind()
     {
         reset($this->files);
+
     }//end rewind()
 
 
@@ -188,6 +192,7 @@ class FileList implements \Iterator, \Countable
         }
 
         return $this->files[$path];
+
     }//end current()
 
 
@@ -200,6 +205,7 @@ class FileList implements \Iterator, \Countable
     public function key()
     {
         return key($this->files);
+
     }//end key()
 
 
@@ -212,6 +218,7 @@ class FileList implements \Iterator, \Countable
     public function next()
     {
         next($this->files);
+
     }//end next()
 
 
@@ -228,6 +235,7 @@ class FileList implements \Iterator, \Countable
         }
 
         return true;
+
     }//end valid()
 
 
@@ -240,5 +248,8 @@ class FileList implements \Iterator, \Countable
     public function count()
     {
         return $this->numFiles;
+
     }//end count()
+
+
 }//end class

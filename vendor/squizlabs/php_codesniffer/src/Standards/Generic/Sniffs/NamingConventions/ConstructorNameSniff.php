@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Bans PHP 4 style constructors.
  *
@@ -19,6 +18,7 @@ use PHP_CodeSniffer\Sniffs\AbstractScopeSniff;
 
 class ConstructorNameSniff extends AbstractScopeSniff
 {
+
     /**
      * The name of the class we are currently checking.
      *
@@ -40,6 +40,7 @@ class ConstructorNameSniff extends AbstractScopeSniff
     public function __construct()
     {
         parent::__construct([T_CLASS, T_ANON_CLASS], [T_FUNCTION], true);
+
     }//end __construct()
 
 
@@ -83,7 +84,7 @@ class ConstructorNameSniff extends AbstractScopeSniff
                 $error = 'PHP4 style constructors are not allowed; use "__construct()" instead';
                 $phpcsFile->addError($error, $stackPtr, 'OldStyle');
             }
-        } elseif ($methodName !== '__construct') {
+        } else if ($methodName !== '__construct') {
             // Not a constructor.
             return;
         }
@@ -101,8 +102,7 @@ class ConstructorNameSniff extends AbstractScopeSniff
         $endFunctionIndex = $tokens[$stackPtr]['scope_closer'];
         $startIndex       = $stackPtr;
         while (($doubleColonIndex = $phpcsFile->findNext(T_DOUBLE_COLON, $startIndex, $endFunctionIndex)) !== false) {
-            if (
-                $tokens[($doubleColonIndex + 1)]['code'] === T_STRING
+            if ($tokens[($doubleColonIndex + 1)]['code'] === T_STRING
                 && strtolower($tokens[($doubleColonIndex + 1)]['content']) === $parentClassName
             ) {
                 $error = 'PHP4 style calls to parent constructors are not allowed; use "parent::__construct()" instead';
@@ -111,6 +111,7 @@ class ConstructorNameSniff extends AbstractScopeSniff
 
             $startIndex = ($doubleColonIndex + 1);
         }
+
     }//end processTokenWithinScope()
 
 
@@ -126,6 +127,7 @@ class ConstructorNameSniff extends AbstractScopeSniff
      */
     protected function processTokenOutsideScope(File $phpcsFile, $stackPtr)
     {
+
     }//end processTokenOutsideScope()
 
 
@@ -154,5 +156,8 @@ class ConstructorNameSniff extends AbstractScopeSniff
                 $i = $tokens[$i]['scope_closer'];
             }
         }
+
     }//end loadFunctionNamesInScope()
+
+
 }//end class

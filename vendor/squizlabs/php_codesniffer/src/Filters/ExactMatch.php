@@ -1,5 +1,4 @@
 <?php
-
 /**
  * An abstract filter class for checking files and folders against exact matches.
  *
@@ -16,6 +15,7 @@ use PHP_CodeSniffer\Util;
 
 abstract class ExactMatch extends Filter
 {
+
     /**
      * A list of files to exclude.
      *
@@ -67,6 +67,7 @@ abstract class ExactMatch extends Filter
         }
 
         return isset($this->whitelist[$filePath]);
+
     }//end accept()
 
 
@@ -84,6 +85,7 @@ abstract class ExactMatch extends Filter
         $children->blacklist = $this->blacklist;
         $children->whitelist = $this->whitelist;
         return $children;
+
     }//end getChildren()
 
 
@@ -101,4 +103,6 @@ abstract class ExactMatch extends Filter
      * @return array
      */
     abstract protected function getWhitelist();
+
+
 }//end class

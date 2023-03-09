@@ -1,5 +1,4 @@
 <?php
-
 $var = [1,2,3];
 $var = [
     1,
@@ -34,7 +33,7 @@ $var = [
     ];
 
 $var = array(
-    'one' => function () {
+    'one' => function() {
         $foo = [1,2,3];
         $bar = [
             1,
@@ -91,15 +90,24 @@ $var = [
 // phpcs:set Generic.Arrays.ArrayIndent indent 4
 
 $array = array(
-    match ($test) {
-    1 => 'a', 2 => 'b'
-    }
+    match ($test) { 1 => 'a', 2 => 'b' }
           => 'dynamic keys, woho!',
 );
 
 $array = [
-  match ($test) {
-    1 => 'a', 2 => 'b'
-  }
+  match ($test) { 1 => 'a', 2 => 'b' }
        => 'dynamic keys, woho!',
+];
+
+// Ensure that PHP 8.0 named parameters don't affect the sniff.
+$array = [
+    functionCall(
+        name: $value
+    ),
+];
+
+$array = [
+  functionCall(
+    name: $value
+    ),
 ];

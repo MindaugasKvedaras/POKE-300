@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A filter to only include files that have been modified or added in a Git repository.
  *
@@ -14,6 +13,8 @@ use PHP_CodeSniffer\Util;
 
 class GitModified extends ExactMatch
 {
+
+
     /**
      * Get a list of blacklisted file paths.
      *
@@ -22,6 +23,7 @@ class GitModified extends ExactMatch
     protected function getBlacklist()
     {
         return [];
+
     }//end getBlacklist()
 
 
@@ -34,7 +36,7 @@ class GitModified extends ExactMatch
     {
         $modified = [];
 
-        $cmd    = 'git ls-files -o -m --exclude-standard -- ' . escapeshellarg($this->basedir);
+        $cmd    = 'git ls-files -o -m --exclude-standard -- '.escapeshellarg($this->basedir);
         $output = [];
         exec($cmd, $output);
 
@@ -57,5 +59,8 @@ class GitModified extends ExactMatch
         }
 
         return $modified;
+
     }//end getWhitelist()
+
+
 }//end class

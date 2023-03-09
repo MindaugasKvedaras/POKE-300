@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Full report for PHP_CodeSniffer.
  *
@@ -15,6 +14,8 @@ use PHP_CodeSniffer\Util;
 
 class Full implements Report
 {
+
+
     /**
      * Generate a partial report for a single processed file.
      *
@@ -29,7 +30,7 @@ class Full implements Report
      *
      * @return bool
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
+    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
     {
         if ($report['errors'] === 0 && $report['warnings'] === 0) {
             // Nothing to print.
@@ -81,35 +82,35 @@ class Full implements Report
             $width = 70;
         }
 
-        echo PHP_EOL . "\033[1mFILE: ";
+        echo PHP_EOL."\033[1mFILE: ";
         if ($fileLength <= ($width - 6)) {
             echo $file;
         } else {
-            echo '...' . substr($file, ($fileLength - ($width - 6)));
+            echo '...'.substr($file, ($fileLength - ($width - 6)));
         }
 
-        echo "\033[0m" . PHP_EOL;
-        echo str_repeat('-', $width) . PHP_EOL;
+        echo "\033[0m".PHP_EOL;
+        echo str_repeat('-', $width).PHP_EOL;
 
-        echo "\033[1m" . 'FOUND ' . $report['errors'] . ' ERROR';
+        echo "\033[1m".'FOUND '.$report['errors'].' ERROR';
         if ($report['errors'] !== 1) {
             echo 'S';
         }
 
         if ($report['warnings'] > 0) {
-            echo ' AND ' . $report['warnings'] . ' WARNING';
+            echo ' AND '.$report['warnings'].' WARNING';
             if ($report['warnings'] !== 1) {
                 echo 'S';
             }
         }
 
-        echo ' AFFECTING ' . count($report['messages']) . ' LINE';
+        echo ' AFFECTING '.count($report['messages']).' LINE';
         if (count($report['messages']) !== 1) {
             echo 'S';
         }
 
-        echo "\033[0m" . PHP_EOL;
-        echo str_repeat('-', $width) . PHP_EOL;
+        echo "\033[0m".PHP_EOL;
+        echo str_repeat('-', $width).PHP_EOL;
 
         // The maximum amount of space an error message can use.
         $maxErrorSpace = ($width - $paddingLength - 1);
@@ -131,24 +132,24 @@ class Full implements Report
                                 $errorMsg .= "\033[1m";
                             }
                         } else {
-                            $errorMsg .= PHP_EOL . $paddingLine2;
+                            $errorMsg .= PHP_EOL.$paddingLine2;
                         }
 
                         if ($k === $lastLine && $showSources === true) {
-                            $msgLine .= "\033[0m" . ' (' . $error['source'] . ')';
+                            $msgLine .= "\033[0m".' ('.$error['source'].')';
                         }
 
                         $errorMsg .= wordwrap(
                             $msgLine,
                             $maxErrorSpace,
-                            PHP_EOL . $paddingLine2
+                            PHP_EOL.$paddingLine2
                         );
                     }
 
                     // The padding that goes on the front of the line.
                     $padding = ($maxLineNumLength - strlen($line));
 
-                    echo ' ' . str_repeat(' ', $padding) . $line . ' | ';
+                    echo ' '.str_repeat(' ', $padding).$line.' | ';
                     if ($error['type'] === 'ERROR') {
                         echo "\033[31mERROR\033[0m";
                         if ($report['warnings'] > 0) {
@@ -170,19 +171,20 @@ class Full implements Report
                         echo '] ';
                     }
 
-                    echo $errorMsg . PHP_EOL;
+                    echo $errorMsg.PHP_EOL;
                 }//end foreach
             }//end foreach
         }//end foreach
 
-        echo str_repeat('-', $width) . PHP_EOL;
+        echo str_repeat('-', $width).PHP_EOL;
         if ($report['fixable'] > 0) {
-            echo "\033[1m" . 'PHPCBF CAN FIX THE ' . $report['fixable'] . ' MARKED SNIFF VIOLATIONS AUTOMATICALLY' . "\033[0m" . PHP_EOL;
-            echo str_repeat('-', $width) . PHP_EOL;
+            echo "\033[1m".'PHPCBF CAN FIX THE '.$report['fixable'].' MARKED SNIFF VIOLATIONS AUTOMATICALLY'."\033[0m".PHP_EOL;
+            echo str_repeat('-', $width).PHP_EOL;
         }
 
         echo PHP_EOL;
         return true;
+
     }//end generateFileReport()
 
 
@@ -208,10 +210,10 @@ class Full implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources = false,
-        $width = 80,
-        $interactive = false,
-        $toScreen = true
+        $showSources=false,
+        $width=80,
+        $interactive=false,
+        $toScreen=true
     ) {
         if ($cachedData === '') {
             return;
@@ -222,5 +224,8 @@ class Full implements Report
         if ($toScreen === true && $interactive === false) {
             Util\Timing::printRunTime();
         }
+
     }//end generate()
+
+
 }//end class

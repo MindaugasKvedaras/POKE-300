@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Ensures that variables are not passed by reference when calling a function.
  *
@@ -16,6 +15,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class CallTimePassByReferenceSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -27,6 +28,7 @@ class CallTimePassByReferenceSniff implements Sniff
             T_STRING,
             T_VARIABLE,
         ];
+
     }//end register()
 
 
@@ -132,5 +134,8 @@ class CallTimePassByReferenceSniff implements Sniff
                 $phpcsFile->addError($error, $tokenBefore, 'NotAllowed');
             }//end if
         }//end while
+
     }//end process()
+
+
 }//end class

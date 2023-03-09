@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Throws an error or warning when any code prefixed with an asperand is encountered.
  *
@@ -22,6 +21,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class NoSilencedErrorsSniff implements Sniff
 {
+
     /**
      * If true, an error will be thrown; otherwise a warning.
      *
@@ -38,6 +38,7 @@ class NoSilencedErrorsSniff implements Sniff
     public function register()
     {
         return [T_ASPERAND];
+
     }//end register()
 
 
@@ -60,7 +61,7 @@ class NoSilencedErrorsSniff implements Sniff
         }
 
         $found = $phpcsFile->getTokensAsString($stackPtr, $contextLength);
-        $found = str_replace(["\t", "\n", "\r"], ' ', $found) . '...';
+        $found = str_replace(["\t", "\n", "\r"], ' ', $found).'...';
 
         if ($this->error === true) {
             $error = 'Silencing errors is forbidden; found: %s';
@@ -69,5 +70,8 @@ class NoSilencedErrorsSniff implements Sniff
             $error = 'Silencing errors is discouraged; found: %s';
             $phpcsFile->addWarning($error, $stackPtr, 'Discouraged', [$found]);
         }
+
     }//end process()
+
+
 }//end class

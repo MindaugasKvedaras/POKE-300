@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Ban the use of Yoda conditions.
  *
@@ -17,6 +16,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class DisallowYodaConditionsSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -25,6 +26,7 @@ class DisallowYodaConditionsSniff implements Sniff
     public function register()
     {
         return Tokens::$comparisonTokens;
+
     }//end register()
 
 
@@ -52,8 +54,7 @@ class DisallowYodaConditionsSniff implements Sniff
             T_CONSTANT_ENCAPSED_STRING,
         ];
 
-        if (
-            $previousIndex === false
+        if ($previousIndex === false
             || in_array($tokens[$previousIndex]['code'], $relevantTokens, true) === false
         ) {
             return;
@@ -112,8 +113,7 @@ class DisallowYodaConditionsSniff implements Sniff
                 if ($prev === false) {
                     return;
                 }
-            } elseif (
-                $tokens[$closeParenthesisIndex]['code'] === T_ARRAY
+            } else if ($tokens[$closeParenthesisIndex]['code'] === T_ARRAY
                 && $this->isArrayStatic($phpcsFile, $closeParenthesisIndex) === false
             ) {
                 return;
@@ -125,6 +125,7 @@ class DisallowYodaConditionsSniff implements Sniff
             $stackPtr,
             'Found'
         );
+
     }//end process()
 
 
@@ -144,7 +145,7 @@ class DisallowYodaConditionsSniff implements Sniff
         if ($tokens[$arrayToken]['code'] === T_OPEN_SHORT_ARRAY) {
             $start = $arrayToken;
             $end   = $tokens[$arrayToken]['bracket_closer'];
-        } elseif ($tokens[$arrayToken]['code'] === T_ARRAY) {
+        } else if ($tokens[$arrayToken]['code'] === T_ARRAY) {
             $start = $tokens[$arrayToken]['parenthesis_opener'];
             $end   = $tokens[$arrayToken]['parenthesis_closer'];
         } else {
@@ -180,5 +181,8 @@ class DisallowYodaConditionsSniff implements Sniff
         }
 
         return true;
+
     }//end isArrayStatic()
+
+
 }//end class

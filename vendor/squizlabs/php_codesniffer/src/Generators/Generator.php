@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The base class for all PHP_CodeSniffer documentation generators.
  *
@@ -18,6 +17,7 @@ use PHP_CodeSniffer\Autoload;
 
 abstract class Generator
 {
+
     /**
      * The ruleset used for the run.
      *
@@ -47,8 +47,8 @@ abstract class Generator
         foreach ($ruleset->sniffs as $className => $sniffClass) {
             $file    = Autoload::getLoadedFileName($className);
             $docFile = str_replace(
-                DIRECTORY_SEPARATOR . 'Sniffs' . DIRECTORY_SEPARATOR,
-                DIRECTORY_SEPARATOR . 'Docs' . DIRECTORY_SEPARATOR,
+                DIRECTORY_SEPARATOR.'Sniffs'.DIRECTORY_SEPARATOR,
+                DIRECTORY_SEPARATOR.'Docs'.DIRECTORY_SEPARATOR,
                 $file
             );
             $docFile = str_replace('Sniff.php', 'Standard.xml', $docFile);
@@ -57,6 +57,7 @@ abstract class Generator
                 $this->docFiles[] = $docFile;
             }
         }
+
     }//end __construct()
 
 
@@ -72,6 +73,7 @@ abstract class Generator
     protected function getTitle(\DOMNode $doc)
     {
         return $doc->getAttribute('title');
+
     }//end getTitle()
 
 
@@ -93,6 +95,7 @@ abstract class Generator
             $documentation = $doc->getElementsByTagName('documentation')->item(0);
             $this->processSniff($documentation);
         }
+
     }//end generate()
 
 
@@ -109,4 +112,6 @@ abstract class Generator
      * @see    generate()
      */
     abstract protected function processSniff(\DOMNode $doc);
+
+
 }//end class

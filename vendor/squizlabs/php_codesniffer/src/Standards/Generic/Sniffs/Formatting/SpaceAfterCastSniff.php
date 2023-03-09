@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Ensures there is a single space after cast tokens.
  *
@@ -16,6 +15,7 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class SpaceAfterCastSniff implements Sniff
 {
+
     /**
      * The number of spaces desired after a cast token.
      *
@@ -39,6 +39,7 @@ class SpaceAfterCastSniff implements Sniff
     public function register()
     {
         return Tokens::$castTokens;
+
     }//end register()
 
 
@@ -56,8 +57,7 @@ class SpaceAfterCastSniff implements Sniff
         $tokens        = $phpcsFile->getTokens();
         $this->spacing = (int) $this->spacing;
 
-        if (
-            $tokens[$stackPtr]['code'] === T_BINARY_CAST
+        if ($tokens[$stackPtr]['code'] === T_BINARY_CAST
             && $tokens[$stackPtr]['content'] === 'b'
         ) {
             // You can't replace a space after this type of binary casting.
@@ -69,8 +69,7 @@ class SpaceAfterCastSniff implements Sniff
             return;
         }
 
-        if (
-            $this->ignoreNewlines === true
+        if ($this->ignoreNewlines === true
             && $tokens[$stackPtr]['line'] !== $tokens[$nextNonEmpty]['line']
         ) {
             $phpcsFile->recordMetric($stackPtr, 'Spacing after cast statement', 'newline');
@@ -100,7 +99,7 @@ class SpaceAfterCastSniff implements Sniff
         $found = 0;
         if ($tokens[$stackPtr]['line'] !== $tokens[$nextNonEmpty]['line']) {
             $found = 'newline';
-        } elseif ($tokens[($stackPtr + 1)]['code'] === T_WHITESPACE) {
+        } else if ($tokens[($stackPtr + 1)]['code'] === T_WHITESPACE) {
             $found = $tokens[($stackPtr + 1)]['length'];
         }
 
@@ -120,7 +119,7 @@ class SpaceAfterCastSniff implements Sniff
         if ($this->spacing !== 0) {
             if ($found === 0) {
                 $errorCode = 'NoSpace';
-            } elseif ($found !== 'newline' && $found < $this->spacing) {
+            } else if ($found !== 'newline' && $found < $this->spacing) {
                 $errorCode = 'TooLittleSpace';
             }
         }
@@ -147,5 +146,8 @@ class SpaceAfterCastSniff implements Sniff
                 $phpcsFile->fixer->endChangeset();
             }
         }
+
     }//end process()
+
+
 }//end class

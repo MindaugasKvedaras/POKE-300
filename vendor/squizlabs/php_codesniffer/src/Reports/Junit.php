@@ -1,5 +1,4 @@
 <?php
-
 /**
  * JUnit report for PHP_CodeSniffer.
  *
@@ -16,6 +15,8 @@ use PHP_CodeSniffer\Files\File;
 
 class Junit implements Report
 {
+
+
     /**
      * Generate a partial report for a single processed file.
      *
@@ -30,9 +31,9 @@ class Junit implements Report
      *
      * @return bool
      */
-    public function generateFileReport($report, File $phpcsFile, $showSources = false, $width = 80)
+    public function generateFileReport($report, File $phpcsFile, $showSources=false, $width=80)
     {
-        $out = new \XMLWriter();
+        $out = new \XMLWriter;
         $out->openMemory();
         $out->setIndent(true);
 
@@ -56,7 +57,7 @@ class Junit implements Report
                 foreach ($lineErrors as $column => $colErrors) {
                     foreach ($colErrors as $error) {
                         $out->startElement('testcase');
-                        $out->writeAttribute('name', $error['source'] . ' at ' . $report['filename'] . " ($line:$column)");
+                        $out->writeAttribute('name', $error['source'].' at '.$report['filename']." ($line:$column)");
 
                         $error['type'] = strtolower($error['type']);
                         if ($phpcsFile->config->encoding !== 'utf-8') {
@@ -77,6 +78,7 @@ class Junit implements Report
         $out->endElement();
         echo $out->flush();
         return true;
+
     }//end generateFileReport()
 
 
@@ -102,10 +104,10 @@ class Junit implements Report
         $totalErrors,
         $totalWarnings,
         $totalFixable,
-        $showSources = false,
-        $width = 80,
-        $interactive = false,
-        $toScreen = true
+        $showSources=false,
+        $width=80,
+        $interactive=false,
+        $toScreen=true
     ) {
         // Figure out the total number of tests.
         $tests   = 0;
@@ -118,9 +120,12 @@ class Junit implements Report
         }
 
         $failures = ($totalErrors + $totalWarnings);
-        echo '<?xml version="1.0" encoding="UTF-8"?>' . PHP_EOL;
-        echo '<testsuites name="PHP_CodeSniffer ' . Config::VERSION . '" errors="0" tests="' . $tests . '" failures="' . $failures . '">' . PHP_EOL;
+        echo '<?xml version="1.0" encoding="UTF-8"?>'.PHP_EOL;
+        echo '<testsuites name="PHP_CodeSniffer '.Config::VERSION.'" errors="0" tests="'.$tests.'" failures="'.$failures.'">'.PHP_EOL;
         echo $cachedData;
-        echo '</testsuites>' . PHP_EOL;
+        echo '</testsuites>'.PHP_EOL;
+
     }//end generate()
+
+
 }//end class

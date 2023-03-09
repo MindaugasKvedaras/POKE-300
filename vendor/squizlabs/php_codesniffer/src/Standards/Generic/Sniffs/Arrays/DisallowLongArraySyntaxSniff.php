@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Bans the use of the PHP long array syntax.
  *
@@ -15,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DisallowLongArraySyntaxSniff implements Sniff
 {
+
+
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -23,6 +24,7 @@ class DisallowLongArraySyntaxSniff implements Sniff
     public function register()
     {
         return [T_ARRAY];
+
     }//end register()
 
 
@@ -43,8 +45,7 @@ class DisallowLongArraySyntaxSniff implements Sniff
 
         $error = 'Short array syntax must be used to define arrays';
 
-        if (
-            isset($tokens[$stackPtr]['parenthesis_opener']) === false
+        if (isset($tokens[$stackPtr]['parenthesis_opener']) === false
             || isset($tokens[$stackPtr]['parenthesis_closer']) === false
         ) {
             // Live coding/parse error, just show the error, don't try and fix it.
@@ -70,5 +71,8 @@ class DisallowLongArraySyntaxSniff implements Sniff
 
             $phpcsFile->fixer->endChangeset();
         }
+
     }//end process()
+
+
 }//end class

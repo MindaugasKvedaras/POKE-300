@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A doc generator that outputs documentation in Markdown format.
  *
@@ -14,6 +13,8 @@ use PHP_CodeSniffer\Config;
 
 class Markdown extends Generator
 {
+
+
     /**
      * Generates the documentation for a standard.
      *
@@ -37,6 +38,7 @@ class Markdown extends Generator
         ob_end_clean();
 
         echo $content;
+
     }//end generate()
 
 
@@ -49,7 +51,8 @@ class Markdown extends Generator
     {
         $standard = $this->ruleset->name;
 
-        echo "# $standard Coding Standard" . PHP_EOL;
+        echo "# $standard Coding Standard".PHP_EOL;
+
     }//end printHeader()
 
 
@@ -63,8 +66,9 @@ class Markdown extends Generator
         // Turn off errors so we don't get timezone warnings if people
         // don't have their timezone set.
         error_reporting(0);
-        echo 'Documentation generated on ' . date('r');
-        echo ' by [PHP_CodeSniffer ' . Config::VERSION . '](https://github.com/squizlabs/PHP_CodeSniffer)' . PHP_EOL;
+        echo 'Documentation generated on '.date('r');
+        echo ' by [PHP_CodeSniffer '.Config::VERSION.'](https://github.com/squizlabs/PHP_CodeSniffer)'.PHP_EOL;
+
     }//end printFooter()
 
 
@@ -80,15 +84,16 @@ class Markdown extends Generator
     protected function processSniff(\DOMNode $doc)
     {
         $title = $this->getTitle($doc);
-        echo PHP_EOL . "## $title" . PHP_EOL;
+        echo PHP_EOL."## $title".PHP_EOL;
 
         foreach ($doc->childNodes as $node) {
             if ($node->nodeName === 'standard') {
                 $this->printTextBlock($node);
-            } elseif ($node->nodeName === 'code_comparison') {
+            } else if ($node->nodeName === 'code_comparison') {
                 $this->printCodeComparisonBlock($node);
             }
         }
+
     }//end processSniff()
 
 
@@ -107,7 +112,8 @@ class Markdown extends Generator
         $content = str_replace('&lt;em&gt;', '*', $content);
         $content = str_replace('&lt;/em&gt;', '*', $content);
 
-        echo $content . PHP_EOL;
+        echo $content.PHP_EOL;
+
     }//end printTextBlock()
 
 
@@ -134,19 +140,22 @@ class Markdown extends Generator
         $second      = str_replace('<em>', '', $second);
         $second      = str_replace('</em>', '', $second);
 
-        echo '  <table>' . PHP_EOL;
-        echo '   <tr>' . PHP_EOL;
-        echo "    <th>$firstTitle</th>" . PHP_EOL;
-        echo "    <th>$secondTitle</th>" . PHP_EOL;
-        echo '   </tr>' . PHP_EOL;
-        echo '   <tr>' . PHP_EOL;
-        echo '<td>' . PHP_EOL . PHP_EOL;
-        echo "    $first" . PHP_EOL . PHP_EOL;
-        echo '</td>' . PHP_EOL;
-        echo '<td>' . PHP_EOL . PHP_EOL;
-        echo "    $second" . PHP_EOL . PHP_EOL;
-        echo '</td>' . PHP_EOL;
-        echo '   </tr>' . PHP_EOL;
-        echo '  </table>' . PHP_EOL;
+        echo '  <table>'.PHP_EOL;
+        echo '   <tr>'.PHP_EOL;
+        echo "    <th>$firstTitle</th>".PHP_EOL;
+        echo "    <th>$secondTitle</th>".PHP_EOL;
+        echo '   </tr>'.PHP_EOL;
+        echo '   <tr>'.PHP_EOL;
+        echo '<td>'.PHP_EOL.PHP_EOL;
+        echo "    $first".PHP_EOL.PHP_EOL;
+        echo '</td>'.PHP_EOL;
+        echo '<td>'.PHP_EOL.PHP_EOL;
+        echo "    $second".PHP_EOL.PHP_EOL;
+        echo '</td>'.PHP_EOL;
+        echo '   </tr>'.PHP_EOL;
+        echo '  </table>'.PHP_EOL;
+
     }//end printCodeComparisonBlock()
+
+
 }//end class

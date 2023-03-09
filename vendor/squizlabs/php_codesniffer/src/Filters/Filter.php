@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A base filter class for filtering out files and folders during a run.
  *
@@ -17,6 +16,7 @@ use ReturnTypeWillChange;
 
 class Filter extends \RecursiveFilterIterator
 {
+
     /**
      * The top-level path we are filtering.
      *
@@ -78,6 +78,7 @@ class Filter extends \RecursiveFilterIterator
         $this->basedir = $basedir;
         $this->config  = $config;
         $this->ruleset = $ruleset;
+
     }//end __construct()
 
 
@@ -109,7 +110,7 @@ class Filter extends \RecursiveFilterIterator
             if ($this->config->local === true) {
                 return false;
             }
-        } elseif ($this->shouldProcessFile($filePath) === false) {
+        } else if ($this->shouldProcessFile($filePath) === false) {
             return false;
         }
 
@@ -119,6 +120,7 @@ class Filter extends \RecursiveFilterIterator
 
         $this->acceptedPaths[$realPath] = true;
         return true;
+
     }//end accept()
 
 
@@ -146,6 +148,7 @@ class Filter extends \RecursiveFilterIterator
         $children->ignoreFilePatterns = $this->ignoreFilePatterns;
         $children->acceptedPaths      = $this->acceptedPaths;
         return $children;
+
     }//end getChildren()
 
 
@@ -184,6 +187,7 @@ class Filter extends \RecursiveFilterIterator
         }
 
         return true;
+
     }//end shouldProcessFile()
 
 
@@ -217,7 +221,7 @@ class Filter extends \RecursiveFilterIterator
                     // Need to check this pattern for dirs as well as individual file paths.
                     $this->ignoreFilePatterns[$pattern] = $type;
 
-                    $pattern = substr($pattern, 0, -2) . '(?=/|$)';
+                    $pattern = substr($pattern, 0, -2).'(?=/|$)';
                     $this->ignoreDirPatterns[$pattern] = $type;
                 } else {
                     // This is a file-specific pattern, so only need to check this
@@ -267,12 +271,15 @@ class Filter extends \RecursiveFilterIterator
                 $testPath = $path;
             }
 
-            $pattern = '`' . $pattern . '`i';
+            $pattern = '`'.$pattern.'`i';
             if (preg_match($pattern, $testPath) === 1) {
                 return true;
             }
         }//end foreach
 
         return false;
+
     }//end shouldIgnorePath()
+
+
 }//end class

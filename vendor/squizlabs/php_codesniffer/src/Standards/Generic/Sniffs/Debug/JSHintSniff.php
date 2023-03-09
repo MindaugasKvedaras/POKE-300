@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Runs jshint.js on the file.
  *
@@ -18,6 +17,7 @@ use PHP_CodeSniffer\Util\Common;
 
 class JSHintSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -34,6 +34,7 @@ class JSHintSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+
     }//end register()
 
 
@@ -60,12 +61,12 @@ class JSHintSniff implements Sniff
 
         if ($rhinoPath !== null) {
             $rhinoPath = Common::escapeshellcmd($rhinoPath);
-            $cmd       = "$rhinoPath \"$jshintPath\" " . escapeshellarg($fileName);
+            $cmd       = "$rhinoPath \"$jshintPath\" ".escapeshellarg($fileName);
             exec($cmd, $output, $retval);
 
             $regex = '`^(?P<error>.+)\(.+:(?P<line>[0-9]+).*:[0-9]+\)$`';
         } else {
-            $cmd = "$jshintPath " . escapeshellarg($fileName);
+            $cmd = "$jshintPath ".escapeshellarg($fileName);
             exec($cmd, $output, $retval);
 
             $regex = '`^(.+?): line (?P<line>[0-9]+), col [0-9]+, (?P<error>.+)$`';
@@ -80,12 +81,15 @@ class JSHintSniff implements Sniff
                 }
 
                 $line    = (int) $matches['line'];
-                $message = 'jshint says: ' . trim($matches['error']);
+                $message = 'jshint says: '.trim($matches['error']);
                 $phpcsFile->addWarningOnLine($message, $line, 'ExternalTool');
             }
         }
 
         // Ignore the rest of the file.
         return ($phpcsFile->numTokens + 1);
+
     }//end process()
+
+
 }//end class

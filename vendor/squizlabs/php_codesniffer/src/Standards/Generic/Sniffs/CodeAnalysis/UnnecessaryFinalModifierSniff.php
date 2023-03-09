@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Detects unnecessary final modifiers inside of final classes.
  *
@@ -29,6 +28,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class UnnecessaryFinalModifierSniff implements Sniff
 {
+
+
     /**
      * Registers the tokens that this sniff wants to listen for.
      *
@@ -37,6 +38,7 @@ class UnnecessaryFinalModifierSniff implements Sniff
     public function register()
     {
         return [T_CLASS];
+
     }//end register()
 
 
@@ -76,5 +78,8 @@ class UnnecessaryFinalModifierSniff implements Sniff
                 $phpcsFile->addWarning($error, $next, 'Found');
             }
         }
+
     }//end process()
+
+
 }//end class

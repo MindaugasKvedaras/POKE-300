@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A dummy file represents a chunk of text that does not have a file system location.
  *
@@ -20,6 +19,8 @@ use PHP_CodeSniffer\Config;
 
 class DummyFile extends File
 {
+
+
     /**
      * Creates a DummyFile object and sets the content.
      *
@@ -54,6 +55,7 @@ class DummyFile extends File
         }
 
         parent::__construct($path, $ruleset, $config);
+
     }//end __construct()
 
 
@@ -73,5 +75,8 @@ class DummyFile extends File
         $this->warningCount = $warningCount;
         $this->fixableCount = $fixableCount;
         $this->fixedCount   = $fixedCount;
+
     }//end setErrorCounts()
+
+
 }//end class

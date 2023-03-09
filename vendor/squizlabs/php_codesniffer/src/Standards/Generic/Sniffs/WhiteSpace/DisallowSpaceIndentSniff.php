@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Throws errors if spaces are used for indentation other than precision indentation.
  *
@@ -15,6 +14,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DisallowSpaceIndentSniff implements Sniff
 {
+
     /**
      * A list of tokenizers this sniff supports.
      *
@@ -45,6 +45,7 @@ class DisallowSpaceIndentSniff implements Sniff
             T_OPEN_TAG,
             T_OPEN_TAG_WITH_ECHO,
         ];
+
     }//end register()
 
 
@@ -110,8 +111,7 @@ class DisallowSpaceIndentSniff implements Sniff
             // If this is an inline HTML token or a subsequent line of a multi-line comment,
             // split the content into indentation whitespace and the actual HTML/text.
             $nonWhitespace = '';
-            if (
-                ($tokens[$i]['code'] === T_INLINE_HTML
+            if (($tokens[$i]['code'] === T_INLINE_HTML
                 || $tokens[$i]['code'] === T_COMMENT)
                 && preg_match('`^(\s*)(\S.*)`s', $content, $matches) > 0
             ) {
@@ -126,8 +126,7 @@ class DisallowSpaceIndentSniff implements Sniff
                 if (isset($matches[2]) === true) {
                     $nonWhitespace = $matches[2];
                 }
-            } elseif (
-                isset($tokens[($i + 1)]) === true
+            } else if (isset($tokens[($i + 1)]) === true
                 && $tokens[$i]['line'] < $tokens[($i + 1)]['line']
             ) {
                 // There is no content after this whitespace except for a newline.
@@ -155,8 +154,7 @@ class DisallowSpaceIndentSniff implements Sniff
                 continue;
             }
 
-            if (
-                ($tokens[$i]['code'] === T_DOC_COMMENT_WHITESPACE
+            if (($tokens[$i]['code'] === T_DOC_COMMENT_WHITESPACE
                 || $tokens[$i]['code'] === T_COMMENT)
                 && $content === ' '
             ) {
@@ -199,7 +197,7 @@ class DisallowSpaceIndentSniff implements Sniff
                         // end of the whitespace.
                         continue;
                     }
-                } elseif ($recordMetrics === true) {
+                } else if ($recordMetrics === true) {
                     $phpcsFile->recordMetric($i, 'Line indent', 'mixed');
                 }
             }//end if
@@ -209,11 +207,14 @@ class DisallowSpaceIndentSniff implements Sniff
             if ($fix === true) {
                 $padding  = str_repeat("\t", $expectedTabs);
                 $padding .= str_repeat(' ', $expectedSpaces);
-                $phpcsFile->fixer->replaceToken($i, $padding . $nonWhitespace);
+                $phpcsFile->fixer->replaceToken($i, $padding.$nonWhitespace);
             }
         }//end for
 
         // Ignore the rest of the file.
         return ($phpcsFile->numTokens + 1);
+
     }//end process()
+
+
 }//end class

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Checks that calls to methods and functions are spaced correctly.
  *
@@ -16,6 +15,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class FunctionCallArgumentSpacingSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -29,10 +30,12 @@ class FunctionCallArgumentSpacingSniff implements Sniff
             T_UNSET,
             T_SELF,
             T_STATIC,
+            T_PARENT,
             T_VARIABLE,
             T_CLOSE_CURLY_BRACKET,
             T_CLOSE_PARENTHESIS,
         ];
+
     }//end register()
 
 
@@ -62,8 +65,7 @@ class FunctionCallArgumentSpacingSniff implements Sniff
             return;
         }
 
-        if (
-            $tokens[$stackPtr]['code'] === T_CLOSE_CURLY_BRACKET
+        if ($tokens[$stackPtr]['code'] === T_CLOSE_CURLY_BRACKET
             && isset($tokens[$stackPtr]['scope_condition']) === true
         ) {
             // Not a function call.
@@ -82,6 +84,7 @@ class FunctionCallArgumentSpacingSniff implements Sniff
         }
 
         $this->checkSpacing($phpcsFile, $stackPtr, $openBracket);
+
     }//end process()
 
 
@@ -111,14 +114,13 @@ class FunctionCallArgumentSpacingSniff implements Sniff
         ];
 
         while (($nextSeparator = $phpcsFile->findNext($find, ($nextSeparator + 1), $closeBracket)) !== false) {
-            if (
-                $tokens[$nextSeparator]['code'] === T_CLOSURE
+            if ($tokens[$nextSeparator]['code'] === T_CLOSURE
                 || $tokens[$nextSeparator]['code'] === T_ANON_CLASS
             ) {
                 // Skip closures.
                 $nextSeparator = $tokens[$nextSeparator]['scope_closer'];
                 continue;
-            } elseif ($tokens[$nextSeparator]['code'] === T_OPEN_SHORT_ARRAY) {
+            } else if ($tokens[$nextSeparator]['code'] === T_OPEN_SHORT_ARRAY) {
                 // Skips arrays using short notation.
                 $nextSeparator = $tokens[$nextSeparator]['bracket_closer'];
                 continue;
@@ -177,5 +179,8 @@ class FunctionCallArgumentSpacingSniff implements Sniff
                 }//end if
             }//end if
         }//end while
+
     }//end checkSpacing()
+
+
 }//end class

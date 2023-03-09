@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Responsible for running PHPCS and PHPCBF.
  *
@@ -24,6 +23,7 @@ use PHP_CodeSniffer\Util\Standards;
 
 class Runner
 {
+
     /**
      * The config data for the run.
      *
@@ -53,6 +53,8 @@ class Runner
      */
     public function runPHPCS()
     {
+        $this->registerOutOfMemoryShutdownMessage('phpcs');
+
         try {
             Util\Timing::startTiming();
             Runner::checkRequirements();
@@ -88,7 +90,7 @@ class Runner
                 foreach ($standards as $standard) {
                     $this->config->standards = [$standard];
                     $ruleset   = new Ruleset($this->config);
-                    $class     = 'PHP_CodeSniffer\Generators\\' . $this->config->generator;
+                    $class     = 'PHP_CodeSniffer\Generators\\'.$this->config->generator;
                     $generator = new $class($ruleset);
                     $generator->generate();
                 }
@@ -121,8 +123,7 @@ class Runner
             // in something like an XML report. If we are printing to screen,
             // the report types would have already worked out who should
             // print the timer info.
-            if (
-                $this->config->interactive === false
+            if ($this->config->interactive === false
                 && ($toScreen === false
                 || (($this->reporter->totalErrors + $this->reporter->totalWarnings) === 0 && $this->config->showProgress === true))
             ) {
@@ -136,13 +137,14 @@ class Runner
         if ($numErrors === 0) {
             // No errors found.
             return 0;
-        } elseif ($this->reporter->totalFixable === 0) {
+        } else if ($this->reporter->totalFixable === 0) {
             // Errors found, but none of them can be fixed by PHPCBF.
             return 1;
         } else {
             // Errors found, and some can be fixed by PHPCBF.
             return 2;
         }
+
     }//end runPHPCS()
 
 
@@ -153,6 +155,8 @@ class Runner
      */
     public function runPHPCBF()
     {
+        $this->registerOutOfMemoryShutdownMessage('phpcbf');
+
         if (defined('PHP_CODESNIFFER_CBF') === false) {
             define('PHP_CODESNIFFER_CBF', true);
         }
@@ -225,6 +229,7 @@ class Runner
 
         // PHPCBF fixed some fixable errors, but others failed to fix.
         return 2;
+
     }//end runPHPCBF()
 
 
@@ -238,7 +243,7 @@ class Runner
     {
         // Check the PHP version.
         if (PHP_VERSION_ID < 50400) {
-            $error = 'ERROR: PHP_CodeSniffer requires PHP version 5.4.0 or greater.' . PHP_EOL;
+            $error = 'ERROR: PHP_CodeSniffer requires PHP version 5.4.0 or greater.'.PHP_EOL;
             throw new DeepExitException($error, 3);
         }
 
@@ -258,20 +263,21 @@ class Runner
         if (empty($missingExtensions) === false) {
             $last      = array_pop($requiredExtensions);
             $required  = implode(', ', $requiredExtensions);
-            $required .= ' and ' . $last;
+            $required .= ' and '.$last;
 
             if (count($missingExtensions) === 1) {
                 $missing = $missingExtensions[0];
             } else {
                 $last     = array_pop($missingExtensions);
                 $missing  = implode(', ', $missingExtensions);
-                $missing .= ' and ' . $last;
+                $missing .= ' and '.$last;
             }
 
-            $error = 'ERROR: PHP_CodeSniffer requires the %s extensions to be enabled. Please enable %s.' . PHP_EOL;
+            $error = 'ERROR: PHP_CodeSniffer requires the %s extensions to be enabled. Please enable %s.'.PHP_EOL;
             $error = sprintf($error, $required, $missing);
             throw new DeepExitException($error, 3);
         }
+
     }//end checkRequirements()
 
 
@@ -299,7 +305,7 @@ class Runner
             if (Util\Standards::isInstalledStandard($standard) === false) {
                 // They didn't select a valid coding standard, so help them
                 // out by letting them know which standards are installed.
-                $error = 'ERROR: the "' . $standard . '" coding standard is not installed. ';
+                $error = 'ERROR: the "'.$standard.'" coding standard is not installed. ';
                 ob_start();
                 Util\Standards::printInstalledStandards();
                 $error .= ob_get_contents();
@@ -329,10 +335,11 @@ class Runner
         try {
             $this->ruleset = new Ruleset($this->config);
         } catch (RuntimeException $e) {
-            $error  = 'ERROR: ' . $e->getMessage() . PHP_EOL . PHP_EOL;
+            $error  = 'ERROR: '.$e->getMessage().PHP_EOL.PHP_EOL;
             $error .= $this->config->printShortUsage(true);
             throw new DeepExitException($error, 3);
         }
+
     }//end init()
 
 
@@ -367,7 +374,7 @@ class Runner
             $todo->addFile($dummy->path, $dummy);
         } else {
             if (empty($this->config->files) === true) {
-                $error  = 'ERROR: You must supply at least one file or directory to process.' . PHP_EOL . PHP_EOL;
+                $error  = 'ERROR: You must supply at least one file or directory to process.'.PHP_EOL.PHP_EOL;
                 $error .= $this->config->printShortUsage(true);
                 throw new DeepExitException($error, 3);
             }
@@ -380,7 +387,7 @@ class Runner
 
             if (PHP_CODESNIFFER_VERBOSITY > 0) {
                 $numFiles = count($todo);
-                echo "DONE ($numFiles files in queue)" . PHP_EOL;
+                echo "DONE ($numFiles files in queue)".PHP_EOL;
             }
 
             if ($this->config->cache === true) {
@@ -392,7 +399,7 @@ class Runner
 
                 if (PHP_CODESNIFFER_VERBOSITY > 0) {
                     $size = Cache::getSize();
-                    echo "DONE ($size files in cache)" . PHP_EOL;
+                    echo "DONE ($size files in cache)".PHP_EOL;
                 }
             }
         }//end if
@@ -422,15 +429,15 @@ class Runner
                     $currDir = dirname($path);
                     if ($lastDir !== $currDir) {
                         if (PHP_CODESNIFFER_VERBOSITY > 0) {
-                            echo 'Changing into directory ' . Common::stripBasepath($currDir, $this->config->basepath) . PHP_EOL;
+                            echo 'Changing into directory '.Common::stripBasepath($currDir, $this->config->basepath).PHP_EOL;
                         }
 
                         $lastDir = $currDir;
                     }
 
                     $this->processFile($file);
-                } elseif (PHP_CODESNIFFER_VERBOSITY > 0) {
-                    echo 'Skipping ' . basename($file->path) . PHP_EOL;
+                } else if (PHP_CODESNIFFER_VERBOSITY > 0) {
+                    echo 'Skipping '.basename($file->path).PHP_EOL;
                 }
 
                 $numProcessed++;
@@ -456,7 +463,7 @@ class Runner
                 $pid = pcntl_fork();
                 if ($pid === -1) {
                     throw new RuntimeException('Failed to create child process');
-                } elseif ($pid !== 0) {
+                } else if ($pid !== 0) {
                     $childProcs[$pid] = $childOutFilename;
                 } else {
                     // Move forward to the start of the batch.
@@ -488,7 +495,7 @@ class Runner
                         $currDir = dirname($path);
                         if ($lastDir !== $currDir) {
                             if (PHP_CODESNIFFER_VERBOSITY > 0) {
-                                echo 'Changing into directory ' . Common::stripBasepath($currDir, $this->config->basepath) . PHP_EOL;
+                                echo 'Changing into directory '.Common::stripBasepath($currDir, $this->config->basepath).PHP_EOL;
                             }
 
                             $lastDir = $currDir;
@@ -513,7 +520,7 @@ class Runner
                         'totalFixed'    => $this->reporter->totalFixed,
                     ];
 
-                    $output  = '<' . '?php' . "\n" . ' $childOutput = ';
+                    $output  = '<'.'?php'."\n".' $childOutput = ';
                     $output .= var_export($childOutput, true);
                     $output .= ";\n\$debugOutput = ";
                     $output .= var_export($debugOutput, true);
@@ -528,7 +535,7 @@ class Runner
                         $output .= var_export($childCache, true);
                     }
 
-                    $output .= ";\n?" . '>';
+                    $output .= ";\n?".'>';
                     file_put_contents($childOutFilename, $output);
                     exit();
                 }//end if
@@ -542,12 +549,11 @@ class Runner
 
         restore_error_handler();
 
-        if (
-            PHP_CODESNIFFER_VERBOSITY === 0
+        if (PHP_CODESNIFFER_VERBOSITY === 0
             && $this->config->interactive === false
             && $this->config->showProgress === true
         ) {
-            echo PHP_EOL . PHP_EOL;
+            echo PHP_EOL.PHP_EOL;
         }
 
         if ($this->config->cache === true) {
@@ -573,6 +579,7 @@ class Runner
         }
 
         return $return;
+
     }//end run()
 
 
@@ -599,6 +606,7 @@ class Runner
         }
 
         throw new RuntimeException("$message in $file on line $line");
+
     }//end handleErrors()
 
 
@@ -614,7 +622,7 @@ class Runner
     {
         if (PHP_CODESNIFFER_VERBOSITY > 0) {
             $startTime = microtime(true);
-            echo 'Processing ' . basename($file->path) . ' ';
+            echo 'Processing '.basename($file->path).' ';
             if (PHP_CODESNIFFER_VERBOSITY > 1) {
                 echo PHP_EOL;
             }
@@ -635,15 +643,15 @@ class Runner
 
                 if (PHP_CODESNIFFER_CBF === true) {
                     $errors = $file->getFixableCount();
-                    echo " ($errors fixable violations)" . PHP_EOL;
+                    echo " ($errors fixable violations)".PHP_EOL;
                 } else {
                     $errors   = $file->getErrorCount();
                     $warnings = $file->getWarningCount();
-                    echo " ($errors errors, $warnings warnings)" . PHP_EOL;
+                    echo " ($errors errors, $warnings warnings)".PHP_EOL;
                 }
             }
         } catch (\Exception $e) {
-            $error = 'An error occurred during processing; checking has been aborted. The error message was: ' . $e->getMessage();
+            $error = 'An error occurred during processing; checking has been aborted. The error message was: '.$e->getMessage();
             $file->addErrorOnLine($error, 1, 'Internal.Exception');
         }//end try
 
@@ -671,25 +679,26 @@ class Runner
                 $input = trim($input);
 
                 switch ($input) {
-                    case 's':
-                        break(2);
-                    case 'q':
-                        throw new DeepExitException('', 0);
-                    default:
-                        // Repopulate the sniffs because some of them save their state
-                        // and only clear it when the file changes, but we are rechecking
-                        // the same file.
-                        $file->ruleset->populateTokenListeners();
-                        $file->reloadContent();
-                        $file->process();
-                        $this->reporter->cacheFileReport($file, $this->config);
-                        break;
+                case 's':
+                    break(2);
+                case 'q':
+                    throw new DeepExitException('', 0);
+                default:
+                    // Repopulate the sniffs because some of them save their state
+                    // and only clear it when the file changes, but we are rechecking
+                    // the same file.
+                    $file->ruleset->populateTokenListeners();
+                    $file->reloadContent();
+                    $file->process();
+                    $this->reporter->cacheFileReport($file, $this->config);
+                    break;
                 }
             }//end while
         }//end if
 
         // Clean up the file to save (a lot of) memory.
         $file->cleanUp();
+
     }//end processFile()
 
 
@@ -714,6 +723,11 @@ class Runner
             $pid = pcntl_waitpid(0, $status);
             if ($pid <= 0) {
                 continue;
+            }
+
+            $childProcessStatus = pcntl_wexitstatus($status);
+            if ($childProcessStatus !== 0) {
+                $success = false;
             }
 
             $out = $childProcs[$pid];
@@ -764,6 +778,7 @@ class Runner
         }//end while
 
         return $success;
+
     }//end processChildProcs()
 
 
@@ -779,8 +794,7 @@ class Runner
      */
     public function printProgress(File $file, $numFiles, $numProcessed)
     {
-        if (
-            PHP_CODESNIFFER_VERBOSITY > 0
+        if (PHP_CODESNIFFER_VERBOSITY > 0
             || $this->config->showProgress === false
         ) {
             return;
@@ -809,7 +823,7 @@ class Runner
                     if ($this->config->colors === true) {
                         echo "\033[0m";
                     }
-                } elseif ($fixed > 0) {
+                } else if ($fixed > 0) {
                     if ($this->config->colors === true) {
                         echo "\033[32m";
                     }
@@ -842,7 +856,7 @@ class Runner
                     if ($this->config->colors === true) {
                         echo "\033[0m";
                     }
-                } elseif ($warnings > 0) {
+                } else if ($warnings > 0) {
                     if ($this->config->colors === true) {
                         if ($fixable > 0) {
                             echo "\033[32m";
@@ -869,14 +883,54 @@ class Runner
 
         $percent = round(($numProcessed / $numFiles) * 100);
         $padding = (strlen($numFiles) - strlen($numProcessed));
-        if (
-            $numProcessed === $numFiles
+        if ($numProcessed === $numFiles
             && $numFiles > $numPerLine
             && ($numProcessed % $numPerLine) !== 0
         ) {
             $padding += ($numPerLine - ($numFiles - (floor($numFiles / $numPerLine) * $numPerLine)));
         }
 
-        echo str_repeat(' ', $padding) . " $numProcessed / $numFiles ($percent%)" . PHP_EOL;
+        echo str_repeat(' ', $padding)." $numProcessed / $numFiles ($percent%)".PHP_EOL;
+
     }//end printProgress()
+
+
+    /**
+     * Registers a PHP shutdown function to provide a more informative out of memory error.
+     *
+     * @param string $command The command which was used to initiate the PHPCS run.
+     *
+     * @return void
+     */
+    private function registerOutOfMemoryShutdownMessage($command)
+    {
+        // Allocate all needed memory beforehand as much as possible.
+        $errorMsg    = PHP_EOL.'The PHP_CodeSniffer "%1$s" command ran out of memory.'.PHP_EOL;
+        $errorMsg   .= 'Either raise the "memory_limit" of PHP in the php.ini file or raise the memory limit at runtime'.PHP_EOL;
+        $errorMsg   .= 'using `%1$s -d memory_limit=512M` (replace 512M with the desired memory limit).'.PHP_EOL;
+        $errorMsg    = sprintf($errorMsg, $command);
+        $memoryError = 'Allowed memory size of';
+        $errorArray  = [
+            'type'    => 42,
+            'message' => 'Some random dummy string to take up memory and take up some more memory and some more',
+            'file'    => 'Another random string, which would be a filename this time. Should be relatively long to allow for deeply nested files',
+            'line'    => 31427,
+        ];
+
+        register_shutdown_function(
+            static function () use (
+                $errorMsg,
+                $memoryError,
+                $errorArray
+            ) {
+                $errorArray = error_get_last();
+                if (is_array($errorArray) === true && strpos($errorArray['message'], $memoryError) !== false) {
+                    echo $errorMsg;
+                }
+            }
+        );
+
+    }//end registerOutOfMemoryShutdownMessage()
+
+
 }//end class

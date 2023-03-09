@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Ensures PHP believes the syntax is clean.
  *
@@ -18,6 +17,7 @@ use PHP_CodeSniffer\Util\Common;
 
 class SyntaxSniff implements Sniff
 {
+
     /**
      * The path to the PHP version we are checking with.
      *
@@ -37,6 +37,7 @@ class SyntaxSniff implements Sniff
             T_OPEN_TAG,
             T_OPEN_TAG_WITH_ECHO,
         ];
+
     }//end register()
 
 
@@ -56,7 +57,7 @@ class SyntaxSniff implements Sniff
         }
 
         $fileName = escapeshellarg($phpcsFile->getFilename());
-        $cmd      = Common::escapeshellcmd($this->phpPath) . " -l -d display_errors=1 -d error_prepend_string='' $fileName 2>&1";
+        $cmd      = Common::escapeshellcmd($this->phpPath)." -l -d display_errors=1 -d error_prepend_string='' $fileName 2>&1";
         $output   = shell_exec($cmd);
         $matches  = [];
         if (preg_match('/^.*error:(.*) in .* on line ([0-9]+)/m', trim($output), $matches) === 1) {
@@ -67,5 +68,8 @@ class SyntaxSniff implements Sniff
 
         // Ignore the rest of the file.
         return ($phpcsFile->numTokens + 1);
+
     }//end process()
+
+
 }//end class

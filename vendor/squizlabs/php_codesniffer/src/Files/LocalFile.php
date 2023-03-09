@@ -1,5 +1,4 @@
 <?php
-
 /**
  * A local file represents a chunk of text has a file system location.
  *
@@ -17,6 +16,8 @@ use PHP_CodeSniffer\Util\Common;
 
 class LocalFile extends File
 {
+
+
     /**
      * Creates a LocalFile object and sets the content.
      *
@@ -47,8 +48,7 @@ class LocalFile extends File
                 $firstContent .= fgets($handle);
                 fclose($handle);
 
-                if (
-                    strpos($firstContent, '@codingStandardsIgnoreFile') !== false
+                if (strpos($firstContent, '@codingStandardsIgnoreFile') !== false
                     || stripos($firstContent, 'phpcs:ignorefile') !== false
                 ) {
                     // We are ignoring the whole file.
@@ -61,6 +61,7 @@ class LocalFile extends File
         $this->reloadContent();
 
         parent::__construct($this->path, $ruleset, $config);
+
     }//end __construct()
 
 
@@ -72,6 +73,7 @@ class LocalFile extends File
     public function reloadContent()
     {
         $this->setContent(file_get_contents($this->path));
+
     }//end reloadContent()
 
 
@@ -110,8 +112,7 @@ class LocalFile extends File
                 $this->fixableCount = $cache['fixableCount'];
             }
 
-            if (
-                PHP_CODESNIFFER_VERBOSITY > 0
+            if (PHP_CODESNIFFER_VERBOSITY > 0
                 || (PHP_CODESNIFFER_CBF === true && empty($this->config->files) === false)
             ) {
                 echo "[loaded from cache]... ";
@@ -148,6 +149,7 @@ class LocalFile extends File
             $this->replayErrors($this->errors, $this->warnings);
             $this->configCache['cache'] = true;
         }
+
     }//end process()
 
 
@@ -210,5 +212,8 @@ class LocalFile extends File
         }
 
         $this->replayingErrors = false;
+
     }//end replayErrors()
+
+
 }//end class

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * An exception thrown by PHP_CodeSniffer when it encounters an unrecoverable tokenizer error.
  *
@@ -12,4 +11,5 @@ namespace PHP_CodeSniffer\Exceptions;
 
 class TokenizerException extends \Exception
 {
+
 }//end class

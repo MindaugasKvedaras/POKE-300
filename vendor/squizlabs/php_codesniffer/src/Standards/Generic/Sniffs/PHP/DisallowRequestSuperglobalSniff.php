@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Ensures the $_REQUEST superglobal is not used
  *
@@ -15,6 +14,8 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DisallowRequestSuperglobalSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -23,14 +24,16 @@ class DisallowRequestSuperglobalSniff implements Sniff
     public function register()
     {
         return [T_VARIABLE];
+
     }//end register()
 
 
     /**
      * Processes this sniff, when one of its tokens is encountered.
      *
-     * @param File $phpcsFile The file being scanned.
-     * @param int  $stackPtr  The position of the current token in the stack passed in $tokens.
+     * @param \PHP_CodeSniffer\Files\File $phpcsFile The file being scanned.
+     * @param int                         $stackPtr  The position of the current token in the stack
+     *                                               passed in $tokens.
      *
      * @return void
      */
@@ -45,5 +48,8 @@ class DisallowRequestSuperglobalSniff implements Sniff
 
         $error = 'The $_REQUEST superglobal should not be used; use $_GET, $_POST, or $_COOKIE instead';
         $phpcsFile->addError($error, $stackPtr, 'Found');
+
     }//end process()
+
+
 }//end class

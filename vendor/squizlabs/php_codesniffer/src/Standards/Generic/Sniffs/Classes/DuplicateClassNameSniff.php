@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Reports errors if the same class or interface name is used in multiple files.
  *
@@ -15,6 +14,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class DuplicateClassNameSniff implements Sniff
 {
+
     /**
      * List of classes that have been found during checking.
      *
@@ -31,6 +31,7 @@ class DuplicateClassNameSniff implements Sniff
     public function register()
     {
         return [T_OPEN_TAG];
+
     }//end register()
 
 
@@ -84,7 +85,7 @@ class DuplicateClassNameSniff implements Sniff
                 $nameToken = $phpcsFile->findNext(T_STRING, $stackPtr);
                 $name      = $tokens[$nameToken]['content'];
                 if ($namespace !== '') {
-                    $name = $namespace . '\\' . $name;
+                    $name = $namespace.'\\'.$name;
                 }
 
                 $compareName = strtolower($name);
@@ -110,5 +111,8 @@ class DuplicateClassNameSniff implements Sniff
 
             $stackPtr = $phpcsFile->findNext($findTokens, ($stackPtr + 1));
         }//end while
+
     }//end process()
+
+
 }//end class

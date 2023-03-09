@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Checks that all uses of TRUE, FALSE and NULL are uppercase.
  *
@@ -11,11 +10,11 @@
 namespace PHP_CodeSniffer\Standards\Generic\Sniffs\PHP;
 
 use PHP_CodeSniffer\Files\File;
-use PHP_CodeSniffer\Sniffs\Sniff;
-use PHP_CodeSniffer\Util\Tokens;
 
 class UpperCaseConstantSniff extends LowerCaseConstantSniff
 {
+
+
     /**
      * Processes a non-type declaration constant.
      *
@@ -51,5 +50,8 @@ class UpperCaseConstantSniff extends LowerCaseConstantSniff
         } else {
             $phpcsFile->recordMetric($stackPtr, 'PHP constant case', 'upper');
         }
+
     }//end processConstant()
+
+
 }//end class

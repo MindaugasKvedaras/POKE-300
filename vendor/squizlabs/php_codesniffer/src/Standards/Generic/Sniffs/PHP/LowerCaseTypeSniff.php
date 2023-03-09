@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Checks that all PHP types are lowercase.
  *
@@ -17,6 +16,7 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class LowerCaseTypeSniff implements Sniff
 {
+
     /**
      * Native types supported by PHP.
      *
@@ -52,8 +52,10 @@ class LowerCaseTypeSniff implements Sniff
         $tokens   = Tokens::$castTokens;
         $tokens[] = T_FUNCTION;
         $tokens[] = T_CLOSURE;
+        $tokens[] = T_FN;
         $tokens[] = T_VARIABLE;
         return $tokens;
+
     }//end register()
 
 
@@ -104,7 +106,7 @@ class LowerCaseTypeSniff implements Sniff
 
                 if ($props['type_token'] === T_TYPE_INTERSECTION) {
                     // Intersection types don't support simple types.
-                } elseif (strpos($type, '|') !== false) {
+                } else if (strpos($type, '|') !== false) {
                     $this->processUnionType(
                         $phpcsFile,
                         $props['type_token'],
@@ -112,7 +114,7 @@ class LowerCaseTypeSniff implements Sniff
                         $error,
                         $errorCode
                     );
-                } elseif (isset($this->phpTypes[strtolower($type)]) === true) {
+                } else if (isset($this->phpTypes[strtolower($type)]) === true) {
                     $this->processType($phpcsFile, $props['type_token'], $type, $error, $errorCode);
                 }
             }
@@ -135,7 +137,7 @@ class LowerCaseTypeSniff implements Sniff
 
             if ($props['return_type_token'] === T_TYPE_INTERSECTION) {
                 // Intersection types don't support simple types.
-            } elseif (strpos($returnType, '|') !== false) {
+            } else if (strpos($returnType, '|') !== false) {
                 $this->processUnionType(
                     $phpcsFile,
                     $props['return_type_token'],
@@ -143,7 +145,7 @@ class LowerCaseTypeSniff implements Sniff
                     $error,
                     $errorCode
                 );
-            } elseif (isset($this->phpTypes[strtolower($returnType)]) === true) {
+            } else if (isset($this->phpTypes[strtolower($returnType)]) === true) {
                 $this->processType($phpcsFile, $props['return_type_token'], $returnType, $error, $errorCode);
             }
         }
@@ -167,7 +169,7 @@ class LowerCaseTypeSniff implements Sniff
 
                 if ($param['type_hint_token'] === T_TYPE_INTERSECTION) {
                     // Intersection types don't support simple types.
-                } elseif (strpos($typeHint, '|') !== false) {
+                } else if (strpos($typeHint, '|') !== false) {
                     $this->processUnionType(
                         $phpcsFile,
                         $param['type_hint_token'],
@@ -175,11 +177,12 @@ class LowerCaseTypeSniff implements Sniff
                         $error,
                         $errorCode
                     );
-                } elseif (isset($this->phpTypes[strtolower($typeHint)]) === true) {
+                } else if (isset($this->phpTypes[strtolower($typeHint)]) === true) {
                     $this->processType($phpcsFile, $param['type_hint_token'], $typeHint, $error, $errorCode);
                 }
             }
         }//end foreach
+
     }//end process()
 
 
@@ -227,6 +230,7 @@ class LowerCaseTypeSniff implements Sniff
 
             $current = ($endOfType + 1);
         } while ($current <= $typeDeclEnd);
+
     }//end processUnionType()
 
 
@@ -265,5 +269,8 @@ class LowerCaseTypeSniff implements Sniff
         if ($fix === true) {
             $phpcsFile->fixer->replaceToken($stackPtr, $typeLower);
         }
+
     }//end processType()
+
+
 }//end class

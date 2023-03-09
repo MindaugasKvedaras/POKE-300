@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Ensures all language constructs contain a single space between themselves and their content.
  *
@@ -17,6 +16,8 @@ use PHP_CodeSniffer\Util\Tokens;
 
 class LanguageConstructSpacingSniff implements Sniff
 {
+
+
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -39,6 +40,7 @@ class LanguageConstructSpacingSniff implements Sniff
             T_NAMESPACE,
             T_USE,
         ];
+
     }//end register()
 
 
@@ -75,8 +77,7 @@ class LanguageConstructSpacingSniff implements Sniff
             }
         }
 
-        if (
-            $tokens[$stackPtr]['code'] === T_YIELD_FROM
+        if ($tokens[$stackPtr]['code'] === T_YIELD_FROM
             && strtolower($content) !== 'yield from'
         ) {
             if ($tokens[($stackPtr - 1)]['code'] === T_YIELD_FROM) {
@@ -101,7 +102,7 @@ class LanguageConstructSpacingSniff implements Sniff
                 preg_match('/yield/i', $found, $yield);
                 preg_match('/from/i', $found, $from);
                 $phpcsFile->fixer->beginChangeset();
-                $phpcsFile->fixer->replaceToken($stackPtr, $yield[0] . ' ' . $from[0]);
+                $phpcsFile->fixer->replaceToken($stackPtr, $yield[0].' '.$from[0]);
 
                 if ($tokens[($stackPtr + 1)]['code'] === T_YIELD_FROM) {
                     $i = ($stackPtr + 1);
@@ -127,16 +128,19 @@ class LanguageConstructSpacingSniff implements Sniff
                     $phpcsFile->fixer->replaceToken(($stackPtr + 1), ' ');
                 }
             }
-        } elseif ($tokens[($stackPtr + 1)]['code'] !== T_OPEN_PARENTHESIS) {
+        } else if ($tokens[($stackPtr + 1)]['code'] !== T_OPEN_PARENTHESIS) {
             $error = 'Language constructs must be followed by a single space; expected "%s" but found "%s"';
             $data  = [
-                $tokens[$stackPtr]['content'] . ' ' . $tokens[($stackPtr + 1)]['content'],
-                $tokens[$stackPtr]['content'] . $tokens[($stackPtr + 1)]['content'],
+                $tokens[$stackPtr]['content'].' '.$tokens[($stackPtr + 1)]['content'],
+                $tokens[$stackPtr]['content'].$tokens[($stackPtr + 1)]['content'],
             ];
             $fix   = $phpcsFile->addFixableError($error, $stackPtr, 'Incorrect', $data);
             if ($fix === true) {
                 $phpcsFile->fixer->addContent($stackPtr, ' ');
             }
         }//end if
+
     }//end process()
+
+
 }//end class

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Discourages the use of alias functions.
  *
@@ -18,6 +17,7 @@ use PHP_CodeSniffer\Sniffs\Sniff;
 
 class ForbiddenFunctionsSniff implements Sniff
 {
+
     /**
      * A list of forbidden functions with their alternatives.
      *
@@ -66,7 +66,7 @@ class ForbiddenFunctionsSniff implements Sniff
 
         if ($this->patternMatch === true) {
             foreach ($this->forbiddenFunctionNames as $i => $name) {
-                $this->forbiddenFunctionNames[$i] = '/' . $name . '/i';
+                $this->forbiddenFunctionNames[$i] = '/'.$name.'/i';
             }
 
             return [T_STRING];
@@ -80,7 +80,7 @@ class ForbiddenFunctionsSniff implements Sniff
             if ($name === '__halt_compiler') {
                 $hasHaltCompiler = true;
             } else {
-                $string .= $name . '();';
+                $string .= $name.'();';
             }
         }
 
@@ -102,6 +102,7 @@ class ForbiddenFunctionsSniff implements Sniff
         $this->forbiddenFunctions     = array_combine($this->forbiddenFunctionNames, $this->forbiddenFunctions);
 
         return array_unique($register);
+
     }//end register()
 
 
@@ -188,6 +189,7 @@ class ForbiddenFunctionsSniff implements Sniff
         }//end if
 
         $this->addError($phpcsFile, $stackPtr, $tokens[$stackPtr]['content'], $pattern);
+
     }//end process()
 
 
@@ -202,7 +204,7 @@ class ForbiddenFunctionsSniff implements Sniff
      *
      * @return void
      */
-    protected function addError($phpcsFile, $stackPtr, $function, $pattern = null)
+    protected function addError($phpcsFile, $stackPtr, $function, $pattern=null)
     {
         $data  = [$function];
         $error = 'The use of function %s() is ';
@@ -218,8 +220,7 @@ class ForbiddenFunctionsSniff implements Sniff
             $pattern = strtolower($function);
         }
 
-        if (
-            $this->forbiddenFunctions[$pattern] !== null
+        if ($this->forbiddenFunctions[$pattern] !== null
             && $this->forbiddenFunctions[$pattern] !== 'null'
         ) {
             $type  .= 'WithAlternative';
@@ -232,5 +233,8 @@ class ForbiddenFunctionsSniff implements Sniff
         } else {
             $phpcsFile->addWarning($error, $stackPtr, $type, $data);
         }
+
     }//end addError()
+
+
 }//end class
