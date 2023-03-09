@@ -1,1 +1,1 @@
-web: vendor/bin/heroku-php-apache2 Login/register_form.php
+web: vendor/bin/heroku-php-apache2 register_form.php
