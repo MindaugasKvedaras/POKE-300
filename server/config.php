@@ -14,26 +14,18 @@
  * @link     No link
  */
 
-// require_once __DIR__ . '../../vendor/autoload.php';
+require_once __DIR__ . '../../vendor/autoload.php';
 
-// use Dotenv\Dotenv;
-// // Load environment variables from .env file
-// $dotenv = Dotenv::createImmutable(__DIR__);
-// $dotenv->load();
+use Dotenv\Dotenv;
+// Load environment variables from .env file
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
-// // Get database connection details from environment variables
-// $db_host = $_ENV['DB_HOST'];
-// $db_name = $_ENV['DB_NAME'];
-// $db_user = $_ENV['DB_USER'];
-// $db_pass = $_ENV['DB_PASS'];
-
-//Get Heroku ClearDB connection information
-$db_url = getenv('CLEARDB_DATABASE_URL');
-$db_parts = parse_url($db_url);
-$db_host = $db_parts['host'];
-$db_name = ltrim($db_parts['path'], '/');
-$db_user = $db_parts['user'];
-$db_pass = $db_parts['pass'];
+// Get database connection details from environment variables
+$db_host = $_ENV['DB_HOST'];
+$db_name = $_ENV['DB_NAME'];
+$db_user = $_ENV['DB_USER'];
+$db_pass = $_ENV['DB_PASS'];
 
 try {
     // Connect to the database using PDO
